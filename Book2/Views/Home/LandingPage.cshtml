@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FrancisBooks – Nhà sách trực tuyến</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/landingPage.css" />
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="logo"><span class="logo-leaf"></span> Francis<span>Books</span></a>
+        <ul>
+            <li><a href="#">Trang chủ</a></li>
+            <li><a href="#categories">Thể loại</a></li>
+            <li><a href="#featured">Nổi bật</a></li>
+            <li><a href="#new">Mới nhất</a></li>
+            <li><a href="#">Khuyến mãi</a></li>
+        </ul>
+        <div class="nav-actions">
+            <div class="nav-search">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input type="text" placeholder="Tìm sách, tác giả..." />
+            </div>
+            <button class="btn-cart" onclick="showToast('Giỏ hàng đang trống.')">
+                 Giỏ hàng
+                <span class="cart-badge" id="cartCount">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-text fade-up">
+            <span class="hero-badge">🌱 Khai trương ưu đãi – Giảm đến 40%</span>
+            <h1>Mỗi cuốn sách<br>là một <em>hành trình</em><br>mới bắt đầu</h1>
+            <p>Khám phá hàng nghìn đầu sách chất lượng — từ văn học kinh điển đến sách kỹ năng, khoa học, nghệ thuật và nhiều hơn nữa.</p>
+            <div class="hero-btns">
+                <a href="#featured" class="btn-primary">Khám phá ngay →</a>
+                <a href="#categories" class="btn-outline">Xem thể loại</a>
+            </div>
+            
+        </div>
+        
+    </section>
+
+    <!-- CATEGORIES -->
+    <section class="categories-bg" id="categories">
+        <div class="section-header">
+            <h2 class="section-title">Thể loại <span>sách</span></h2>
+        </div>
+        <div class="categories-grid" id="catGrid">
+            <a href="#" class="cat-chip active"><span class="cat-icon"></span> Tất cả</a>
+            <a href="#" class="cat-chip"><span class="cat-icon"></span> Văn học</a>
+            <a href="#" class="cat-chip"><span class="cat-icon"></span> Kỹ năng sống</a>
+            <a href="#" class="cat-chip"><span class="cat-icon"></span> Khoa học</a>
+            <a href="#" class="cat-chip"><span class="cat-icon"></span> Kinh doanh</a>
+            <a href="#" class="cat-chip"><span class="cat-icon"></span> Nghệ thuật</a>
+            <a href="#" class="cat-chip"><span class="cat-icon"></span> Lịch sử</a>
+            <a href="#" class="cat-chip"><span class="cat-icon"></span> Thiếu nhi</a>
+            <a href="#" class="cat-chip"><span class="cat-icon"></span> Triết học</a>
+        </div>
+    </section>
+
+    <!-- FEATURED BOOKS -->
+    <section id="featured">
+        <div class="section-header">
+            <h2 class="section-title">Sách <span>nổi bật</span></h2>
+            <a href="#" class="see-all">Xem tất cả →</a>
+        </div>
+        <div class="books-grid" id="booksGrid"></div>
+    </section>
+
+    <!-- PROMO BANNER -->
+    <section style="padding: 0 5% 64px;">
+        <div class="promo-banner">
+            <div class="promo-text">
+                <span class="promo-badge"> Ưu đãi đặc biệt</span>
+                <h2>Mua 2 tặng 1<br>mọi đầu sách</h2>
+                <p>Áp dụng cho tất cả sách trong tuần này. Đừng bỏ lỡ cơ hội sở hữu những cuốn sách hay nhất với giá tốt nhất!</p>
+            </div>
+            <a href="#" class="btn-promo">Mua ngay →</a>
+        </div>
+    </section>
+
+    <!-- NEW ARRIVALS -->
+    <section id="new" style="background: var(--gray-50);">
+        <div class="section-header">
+            <h2 class="section-title">Sách <span>mới nhất</span></h2>
+            <a href="#" class="see-all">Xem tất cả →</a>
+        </div>
+        <div class="books-grid" id="newBooksGrid"></div>
+    </section>
+
+    
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="#" class="logo"> Francis <span style="color:var(--green-200)">Books</span></a>
+                <p>Nhà sách trực tuyến uy tín, mang đến trải nghiệm đọc sách tuyệt vời cho mọi người Việt Nam.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Danh mục</h4>
+                <ul>
+                    <li><a href="#">Văn học</a></li>
+                    <li><a href="#">Kỹ năng sống</a></li>
+                    <li><a href="#">Khoa học</a></li>
+                    <li><a href="#">Thiếu nhi</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Hỗ trợ</h4>
+                <ul>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">Vận chuyển</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Về chúng tôi</h4>
+                <ul>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Tuyển dụng</a></li>
+                    <li><a href="#">Đối tác</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Francis Books. Bảo lưu mọi quyền.</span>
+            <span>🌿 Yêu sách • Yêu tri thức</span>
+        </div>
+    </footer>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">✅ <span id="toastMsg"></span></div>
+
+    <script src="/js/LandingPage.js"></script>
+</body>
+</html>
