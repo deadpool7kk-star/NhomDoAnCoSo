@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Book2.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialIdentity : Migration
+    public partial class InitBookStore : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,52 @@ namespace Book2.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DonHangs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TenNguoiNhan = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    SoDienThoai = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    DiaChiNhanHang = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    NgayDat = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TongTien = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TrangThai = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DonHangs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GioHangs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GioHangs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TheLoais",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenTheLoai = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    MoTa = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TheLoais", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,8 +142,8 @@ namespace Book2.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -141,8 +187,8 @@ namespace Book2.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -154,6 +200,86 @@ namespace Book2.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Saches",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenSach = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    TacGia = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Gia = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    SoLuong = table.Column<int>(type: "int", nullable: false),
+                    MoTa = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HinhAnh = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TheLoaiId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Saches", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Saches_TheLoais_TheLoaiId",
+                        column: x => x.TheLoaiId,
+                        principalTable: "TheLoais",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChiTietDonHangs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DonHangId = table.Column<int>(type: "int", nullable: false),
+                    SachId = table.Column<int>(type: "int", nullable: false),
+                    SoLuong = table.Column<int>(type: "int", nullable: false),
+                    DonGia = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChiTietDonHangs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChiTietDonHangs_DonHangs_DonHangId",
+                        column: x => x.DonHangId,
+                        principalTable: "DonHangs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ChiTietDonHangs_Saches_SachId",
+                        column: x => x.SachId,
+                        principalTable: "Saches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChiTietGioHangs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GioHangId = table.Column<int>(type: "int", nullable: false),
+                    SachId = table.Column<int>(type: "int", nullable: false),
+                    SoLuong = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChiTietGioHangs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChiTietGioHangs_GioHangs_GioHangId",
+                        column: x => x.GioHangId,
+                        principalTable: "GioHangs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ChiTietGioHangs_Saches_SachId",
+                        column: x => x.SachId,
+                        principalTable: "Saches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -194,6 +320,37 @@ namespace Book2.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChiTietDonHangs_DonHangId",
+                table: "ChiTietDonHangs",
+                column: "DonHangId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChiTietDonHangs_SachId",
+                table: "ChiTietDonHangs",
+                column: "SachId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChiTietGioHangs_GioHangId",
+                table: "ChiTietGioHangs",
+                column: "GioHangId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChiTietGioHangs_SachId",
+                table: "ChiTietGioHangs",
+                column: "SachId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GioHangs_UserId",
+                table: "GioHangs",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Saches_TheLoaiId",
+                table: "Saches",
+                column: "TheLoaiId");
         }
 
         /// <inheritdoc />
@@ -215,10 +372,28 @@ namespace Book2.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ChiTietDonHangs");
+
+            migrationBuilder.DropTable(
+                name: "ChiTietGioHangs");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "DonHangs");
+
+            migrationBuilder.DropTable(
+                name: "GioHangs");
+
+            migrationBuilder.DropTable(
+                name: "Saches");
+
+            migrationBuilder.DropTable(
+                name: "TheLoais");
         }
     }
 }
