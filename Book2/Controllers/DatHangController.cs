@@ -33,7 +33,6 @@ namespace Book2.Controllers
                 .FirstOrDefaultAsync(x => x.UserId == userId);
         }
 
-        // Màn hình thanh toán
         [HttpGet]
         public async Task<IActionResult> ThanhToan()
         {
@@ -64,10 +63,10 @@ namespace Book2.Controllers
 
             model.TongTien = model.GioHangItems.Sum(x => x.ThanhTien);
 
+            ViewBag.MuaNgay = false;
             return View(model);
         }
 
-        // Xử lý đặt hàng
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ThanhToan(ThanhToanVM model)
@@ -96,13 +95,13 @@ namespace Book2.Controllers
 
             model.GioHangItems = gioHangItems;
             model.TongTien = gioHangItems.Sum(x => x.ThanhTien);
+            ViewBag.MuaNgay = false;
 
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            // kiểm tra tồn kho trước khi tạo đơn
             foreach (var item in gioHang.ChiTietGioHangs)
             {
                 if (item.Sach == null)
@@ -154,12 +153,147 @@ namespace Book2.Controllers
             return RedirectToAction("DatHangThanhCong");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> MuaNgay(int sachId, int soLuong = 1)
+        {
+            var sach = await _context.Saches
+                .Include(x => x.TheLoai)
+                .FirstOrDefaultAsync(x => x.Id == sachId);
+
+            if (sach == null)
+            {
+                return NotFound();
+            }
+
+            if (soLuong <= 0)
+            {
+                soLuong = 1;
+            }
+
+            if (sach.SoLuong <= 0)
+            {
+                TempData["Error"] = "Sách đã hết hàng.";
+                return RedirectToAction("ChiTiet", "Sach", new { id = sachId });
+            }
+
+            if (soLuong > sach.SoLuong)
+            {
+                TempData["Error"] = "Số lượng mua vượt quá tồn kho.";
+                return RedirectToAction("ChiTiet", "Sach", new { id = sachId });
+            }
+
+            var model = new ThanhToanVM
+            {
+                GioHangItems = new List<GioHangItemVM>
+                {
+                    new GioHangItemVM
+                    {
+                        SachId = sach.Id,
+                        TenSach = sach.TenSach,
+                        TacGia = sach.TacGia,
+                        Gia = sach.Gia,
+                        SoLuong = soLuong,
+                        HinhAnh = sach.HinhAnh
+                    }
+                }
+            };
+
+            model.TongTien = model.GioHangItems.Sum(x => x.ThanhTien);
+
+            ViewBag.MuaNgay = true;
+            ViewBag.SachId = sachId;
+            ViewBag.SoLuong = soLuong;
+
+            return View("ThanhToan", model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MuaNgay(ThanhToanVM model, int sachId, int soLuong = 1)
+        {
+            var sach = await _context.Saches.FirstOrDefaultAsync(x => x.Id == sachId);
+
+            if (sach == null)
+            {
+                return NotFound();
+            }
+
+            if (soLuong <= 0)
+            {
+                soLuong = 1;
+            }
+
+            model.GioHangItems = new List<GioHangItemVM>
+            {
+                new GioHangItemVM
+                {
+                    SachId = sach.Id,
+                    TenSach = sach.TenSach,
+                    TacGia = sach.TacGia,
+                    Gia = sach.Gia,
+                    SoLuong = soLuong,
+                    HinhAnh = sach.HinhAnh
+                }
+            };
+
+            model.TongTien = model.GioHangItems.Sum(x => x.ThanhTien);
+
+            ViewBag.MuaNgay = true;
+            ViewBag.SachId = sachId;
+            ViewBag.SoLuong = soLuong;
+
+            if (!ModelState.IsValid)
+            {
+                return View("ThanhToan", model);
+            }
+
+            if (sach.SoLuong <= 0)
+            {
+                TempData["Error"] = "Sách đã hết hàng.";
+                return RedirectToAction("ChiTiet", "Sach", new { id = sachId });
+            }
+
+            if (soLuong > sach.SoLuong)
+            {
+                TempData["Error"] = "Số lượng mua vượt quá tồn kho.";
+                return RedirectToAction("ChiTiet", "Sach", new { id = sachId });
+            }
+
+            var donHang = new DonHang
+            {
+                UserId = GetUserId(),
+                TenNguoiNhan = model.TenNguoiNhan,
+                SoDienThoai = model.SoDienThoai,
+                DiaChiNhanHang = model.DiaChiNhanHang,
+                NgayDat = DateTime.Now,
+                TongTien = model.TongTien,
+                TrangThai = "Chờ xác nhận"
+            };
+
+            _context.DonHangs.Add(donHang);
+            await _context.SaveChangesAsync();
+
+            _context.ChiTietDonHangs.Add(new ChiTietDonHang
+            {
+                DonHangId = donHang.Id,
+                SachId = sach.Id,
+                SoLuong = soLuong,
+                DonGia = sach.Gia
+            });
+
+            sach.SoLuong -= soLuong;
+
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Mua ngay thành công.";
+            return RedirectToAction("DatHangThanhCong");
+        }
+
         public IActionResult DatHangThanhCong()
         {
             return View();
         }
 
-        // Lịch sử đơn hàng của user
         public async Task<IActionResult> LichSu()
         {
             var userId = GetUserId();
@@ -172,7 +306,6 @@ namespace Book2.Controllers
             return View(dsDonHang);
         }
 
-        // Chi tiết 1 đơn hàng
         public async Task<IActionResult> ChiTiet(int id)
         {
             var userId = GetUserId();

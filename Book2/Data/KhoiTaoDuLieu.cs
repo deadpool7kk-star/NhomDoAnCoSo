@@ -73,7 +73,7 @@ namespace Book2.Data
                     Gia = 92000,
                     SoLuong = 25,
                     MoTa = "Cuốn sách kinh điển về nghệ thuật giao tiếp và ứng xử.",
-                    HinhAnh = "/images/books/Dac-nhan-tam.jpg",
+                    HinhAnh = "/images/Dac-nhan-tam.jpg",
                     TheLoaiId = theLoais.First(x => x.TenTheLoai == "Kỹ năng sống").Id
                 },
                 new Sach
@@ -83,7 +83,7 @@ namespace Book2.Data
                     Gia = 120000,
                     SoLuong = 12,
                     MoTa = "Sách dành cho người mới bắt đầu học lập trình C#.",
-                    HinhAnh = "/images/books/lap-trinh-c-co-ban.jpg",
+                    HinhAnh = "/images/lap-trinh-c-co-ban.jpg",
                     TheLoaiId = theLoais.First(x => x.TenTheLoai == "Công nghệ thông tin").Id
                 },
                 new Sach
@@ -93,7 +93,7 @@ namespace Book2.Data
                     Gia = 145000,
                     SoLuong = 10,
                     MoTa = "Hướng dẫn xây dựng ứng dụng web với ASP.NET Core MVC.",
-                    HinhAnh = "/images/books/Asp.net-core-co-ban.jpg",
+                    HinhAnh = "/images/Asp.net-core-co-ban.jpg",
                     TheLoaiId = theLoais.First(x => x.TenTheLoai == "Công nghệ thông tin").Id
                 },
                 new Sach
@@ -103,7 +103,7 @@ namespace Book2.Data
                     Gia = 99000,
                     SoLuong = 18,
                     MoTa = "Cuốn sách nổi tiếng về tư duy tài chính cá nhân.",
-                    HinhAnh = "/images/books/Cha-giau-cha-ngheo.jpg",
+                    HinhAnh = "/images/Cha-giau-cha-ngheo.jpg",
                     TheLoaiId = theLoais.First(x => x.TenTheLoai == "Kinh tế").Id
                 },
                 new Sach
@@ -113,7 +113,7 @@ namespace Book2.Data
                     Gia = 105000,
                     SoLuong = 14,
                     MoTa = "Bộ sách hướng dẫn tư duy tài chính và đầu tư.",
-                    HinhAnh = "/images/books/Day-con-lam-giau.jpg",
+                    HinhAnh = "/images/Day-con-lam-giau.jpg",
                     TheLoaiId = theLoais.First(x => x.TenTheLoai == "Kinh tế").Id
                 },
                 new Sach
@@ -123,7 +123,7 @@ namespace Book2.Data
                     Gia = 88000,
                     SoLuong = 17,
                     MoTa = "Tác phẩm nổi tiếng của Nguyễn Nhật Ánh về tuổi thơ và ký ức.",
-                    HinhAnh = "/images/books/Toi-thay-hoa-vang-tren-co-xanh.jpg",
+                    HinhAnh = "/images/Toi-thay-hoa-vang-tren-co-xanh.jpg",
                     TheLoaiId = theLoais.First(x => x.TenTheLoai == "Văn học").Id
                 },
                 new Sach
@@ -133,7 +133,7 @@ namespace Book2.Data
                     Gia = 76000,
                     SoLuong = 19,
                     MoTa = "Câu chuyện nhẹ nhàng, sâu sắc về tuổi thơ.",
-                    HinhAnh = "/images/books/Cho-toi-xin-mot-ve-di-tuoi-tho.jpg",
+                    HinhAnh = "/images/Cho-toi-xin-mot-ve-di-tuoi-tho.jpg",
                     TheLoaiId = theLoais.First(x => x.TenTheLoai == "Văn học").Id
                 },
                 new Sach
@@ -143,7 +143,7 @@ namespace Book2.Data
                     Gia = 65000,
                     SoLuong = 30,
                     MoTa = "Tác phẩm thiếu nhi kinh điển của văn học Việt Nam.",
-                    HinhAnh = "/images/books/De-men-phieu-luu-ky.jpg",
+                    HinhAnh = "/images/De-men-phieu-luu-ky.jpg",
                     TheLoaiId = theLoais.First(x => x.TenTheLoai == "Thiếu nhi").Id
                 },
                 new Sach
@@ -153,7 +153,7 @@ namespace Book2.Data
                     Gia = 135000,
                     SoLuong = 16,
                     MoTa = "Phần đầu tiên trong series Harry Potter nổi tiếng.",
-                    HinhAnh = "/images/books/Harry-potter-Va-hon-da-phu-thuy.jpg",
+                    HinhAnh = "/images/Harry-potter-Va-hon-da-phu-thuy.jpg",
                     TheLoaiId = theLoais.First(x => x.TenTheLoai == "Thiếu nhi").Id
                 },
                 new Sach
@@ -163,7 +163,7 @@ namespace Book2.Data
                     Gia = 210000,
                     SoLuong = 8,
                     MoTa = "Cuốn sách kinh điển dành cho lập trình viên về viết mã sạch.",
-                    HinhAnh = "/images/books/Clean-Code.jpg",
+                    HinhAnh = "/images/Clean-Code.jpg",
                     TheLoaiId = theLoais.First(x => x.TenTheLoai == "Công nghệ thông tin").Id
                 }
             };

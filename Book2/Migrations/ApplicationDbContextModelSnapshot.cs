@@ -70,9 +70,10 @@ namespace Book2.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GioHangId");
-
                     b.HasIndex("SachId");
+
+                    b.HasIndex("GioHangId", "SachId")
+                        .IsUnique();
 
                     b.ToTable("ChiTietGioHangs");
                 });
@@ -446,7 +447,7 @@ namespace Book2.Migrations
                     b.HasOne("Book2.Models.TheLoai", "TheLoai")
                         .WithMany("Saches")
                         .HasForeignKey("TheLoaiId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("TheLoai");

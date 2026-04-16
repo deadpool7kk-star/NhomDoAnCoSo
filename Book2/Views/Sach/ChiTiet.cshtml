@@ -1,9 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model Book2.Models.Sach
+﻿@model Book2.Models.Sach
 
 @{
     ViewData["Title"] = "Chi tiết sách";
@@ -11,8 +6,8 @@
 }
 
 <div class="container py-4">
-    <a asp-action="Index" class="btn btn-outline-secondary mb-4">
-        ← Quay lại danh sách sách
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary mb-4">
+        ← Quay lại trang chủ
     </a>
 
     @if (TempData["Success"] != null)
@@ -77,28 +72,52 @@
                     {
                         @if (Model.SoLuong > 0)
                         {
-                            <form asp-controller="GioHang" asp-action="ThemVaoGio" method="post">
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="sachId" value="@Model.Id" />
+                            <div class="d-grid gap-3">
+                                <form asp-controller="GioHang" asp-action="ThemVaoGio" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="sachId" value="@Model.Id" />
 
-                                <div class="row g-3 align-items-end">
-                                    <div class="col-md-4">
-                                        <label class="form-label fw-semibold">Số lượng</label>
-                                        <input type="number"
-                                               name="soLuong"
-                                               value="1"
-                                               min="1"
-                                               max="@Model.SoLuong"
-                                               class="form-control" />
-                                    </div>
+                                    <div class="row g-3 align-items-end">
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold">Số lượng</label>
+                                            <input type="number"
+                                                   name="soLuong"
+                                                   value="1"
+                                                   min="1"
+                                                   max="@Model.SoLuong"
+                                                   class="form-control" />
+                                        </div>
 
-                                    <div class="col-md-8 d-grid">
-                                        <button type="submit" class="btn btn-success btn-lg">
-                                            Thêm vào giỏ hàng
-                                        </button>
+                                        <div class="col-md-8 d-grid">
+                                            <button type="submit" class="btn btn-success btn-lg">
+                                                Thêm vào giỏ hàng
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+
+                                <form asp-controller="DatHang" asp-action="MuaNgay" method="get">
+                                    <input type="hidden" name="sachId" value="@Model.Id" />
+
+                                    <div class="row g-3 align-items-end">
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold">Số lượng mua ngay</label>
+                                            <input type="number"
+                                                   name="soLuong"
+                                                   value="1"
+                                                   min="1"
+                                                   max="@Model.SoLuong"
+                                                   class="form-control" />
+                                        </div>
+
+                                        <div class="col-md-8 d-grid">
+                                            <button type="submit" class="btn btn-warning btn-lg">
+                                                Mua ngay
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         }
                         else
                         {

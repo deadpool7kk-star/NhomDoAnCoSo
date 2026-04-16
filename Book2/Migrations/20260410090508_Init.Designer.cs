@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Book2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260408143856_InitBookStore")]
-    partial class InitBookStore
+    [Migration("20260410090508_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,9 +73,10 @@ namespace Book2.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GioHangId");
-
                     b.HasIndex("SachId");
+
+                    b.HasIndex("GioHangId", "SachId")
+                        .IsUnique();
 
                     b.ToTable("ChiTietGioHangs");
                 });
@@ -449,7 +450,7 @@ namespace Book2.Migrations
                     b.HasOne("Book2.Models.TheLoai", "TheLoai")
                         .WithMany("Saches")
                         .HasForeignKey("TheLoaiId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("TheLoai");

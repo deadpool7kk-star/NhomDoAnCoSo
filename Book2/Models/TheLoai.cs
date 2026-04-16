@@ -12,6 +12,6 @@ namespace Book2.Models
 
         public string? MoTa { get; set; }
 
-        public ICollection<Sach>? Saches { get; set; }
+        public ICollection<Sach> Saches { get; set; } = new List<Sach>();
     }
 }

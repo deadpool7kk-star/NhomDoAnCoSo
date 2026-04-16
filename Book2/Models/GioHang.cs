@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace Book2.Models
+﻿namespace Book2.Models
 {
     public class GioHang
     {
@@ -8,6 +6,6 @@ namespace Book2.Models
 
         public string UserId { get; set; } = string.Empty;
 
-        public ICollection<ChiTietGioHang>? ChiTietGioHangs { get; set; }
+        public ICollection<ChiTietGioHang> ChiTietGioHangs { get; set; } = new List<ChiTietGioHang>();
     }
 }

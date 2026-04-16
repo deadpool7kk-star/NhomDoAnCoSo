@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Book2.Migrations
 {
     /// <inheritdoc />
-    public partial class InitBookStore : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -224,7 +224,7 @@ namespace Book2.Migrations
                         column: x => x.TheLoaiId,
                         principalTable: "TheLoais",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -332,9 +332,10 @@ namespace Book2.Migrations
                 column: "SachId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChiTietGioHangs_GioHangId",
+                name: "IX_ChiTietGioHangs_GioHangId_SachId",
                 table: "ChiTietGioHangs",
-                column: "GioHangId");
+                columns: new[] { "GioHangId", "SachId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChiTietGioHangs_SachId",

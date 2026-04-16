@@ -26,7 +26,9 @@ namespace Book2.Models
 
         public string? HinhAnh { get; set; }
 
+        [Required]
         public int TheLoaiId { get; set; }
+
         public TheLoai? TheLoai { get; set; }
     }
 }

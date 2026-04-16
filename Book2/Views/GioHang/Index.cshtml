@@ -1,9 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model List<Book2.ViewModels.GioHangItemVM>
+﻿@model List<Book2.ViewModels.GioHangItemVM>
 
 @{
     ViewData["Title"] = "Giỏ hàng";
@@ -13,7 +8,7 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold">Giỏ hàng của bạn</h2>
-        <a asp-controller="Sach" asp-action="Index" class="btn btn-outline-primary">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
             Tiếp tục mua sách
         </a>
     </div>

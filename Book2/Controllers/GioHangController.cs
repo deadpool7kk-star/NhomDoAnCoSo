@@ -51,7 +51,6 @@ namespace Book2.Controllers
             return gioHang;
         }
 
-        // Hiển thị giỏ hàng
         public async Task<IActionResult> Index()
         {
             var gioHang = await GetOrCreateGioHangAsync();
@@ -73,7 +72,6 @@ namespace Book2.Controllers
             return View(model);
         }
 
-        // Thêm vào giỏ hàng
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ThemVaoGio(int sachId, int soLuong = 1)
@@ -134,10 +132,9 @@ namespace Book2.Controllers
             await _context.SaveChangesAsync();
 
             TempData["Success"] = "Đã thêm sách vào giỏ hàng.";
-            return RedirectToAction("Index");
+            return RedirectToAction("ChiTiet", "Sach", new { id = sachId });
         }
 
-        // Cập nhật số lượng
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CapNhatSoLuong(int chiTietGioHangId, int soLuong)
@@ -180,7 +177,6 @@ namespace Book2.Controllers
             return RedirectToAction("Index");
         }
 
-        // Xóa 1 sản phẩm khỏi giỏ
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Xoa(int chiTietGioHangId)
@@ -201,7 +197,6 @@ namespace Book2.Controllers
             return RedirectToAction("Index");
         }
 
-        // Xóa toàn bộ giỏ hàng
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> XoaTatCa()

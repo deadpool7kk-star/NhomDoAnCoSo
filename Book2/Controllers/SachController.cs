@@ -13,37 +13,6 @@ namespace Book2.Controllers
             _context = context;
         }
 
-        // Danh sách sách + tìm kiếm + lọc theo thể loại
-        public async Task<IActionResult> Index(string? tuKhoa, int? theLoaiId)
-        {
-            var query = _context.Saches
-                .Include(x => x.TheLoai)
-                .AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(tuKhoa))
-            {
-                query = query.Where(x =>
-                    x.TenSach.Contains(tuKhoa) ||
-                    x.TacGia.Contains(tuKhoa));
-            }
-
-            if (theLoaiId.HasValue)
-            {
-                query = query.Where(x => x.TheLoaiId == theLoaiId.Value);
-            }
-
-            ViewBag.TheLoais = await _context.TheLoais.ToListAsync();
-            ViewBag.TuKhoa = tuKhoa;
-            ViewBag.TheLoaiId = theLoaiId;
-
-            var dsSach = await query
-                .OrderByDescending(x => x.Id)
-                .ToListAsync();
-
-            return View(dsSach);
-        }
-
-        // Chi tiết sách
         public async Task<IActionResult> ChiTiet(int id)
         {
             var sach = await _context.Saches
@@ -55,7 +24,6 @@ namespace Book2.Controllers
                 return NotFound();
             }
 
-            // Sách liên quan cùng thể loại
             var sachLienQuan = await _context.Saches
                 .Include(x => x.TheLoai)
                 .Where(x => x.TheLoaiId == sach.TheLoaiId && x.Id != sach.Id)

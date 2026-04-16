@@ -24,8 +24,21 @@ namespace Book2.Data
         {
             base.OnModelCreating(builder);
 
+            // TheLoai - Sach
+            builder.Entity<Sach>()
+                .HasOne(x => x.TheLoai)
+                .WithMany(x => x.Saches)
+                .HasForeignKey(x => x.TheLoaiId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Mỗi user chỉ có 1 giỏ hàng
             builder.Entity<GioHang>()
                 .HasIndex(x => x.UserId)
+                .IsUnique();
+
+            // Mỗi sách chỉ nên xuất hiện 1 lần trong 1 giỏ hàng
+            builder.Entity<ChiTietGioHang>()
+                .HasIndex(x => new { x.GioHangId, x.SachId })
                 .IsUnique();
 
             builder.Entity<ChiTietGioHang>()

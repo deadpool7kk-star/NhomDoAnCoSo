@@ -1,14 +1,45 @@
-using Book2.Models;
+using Book2.Data;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace Book2.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+
+        public HomeController(ApplicationDbContext context)
         {
-            return View("LandingPage"); // Nó sẽ tìm đến Views/Home/Index.cshtml
+            _context = context;
+        }
+
+        public async Task<IActionResult> Index(string? tuKhoa, int? theLoaiId)
+        {
+            var query = _context.Saches
+                .Include(x => x.TheLoai)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(tuKhoa))
+            {
+                query = query.Where(x =>
+                    x.TenSach.Contains(tuKhoa) ||
+                    x.TacGia.Contains(tuKhoa));
+            }
+
+            if (theLoaiId.HasValue)
+            {
+                query = query.Where(x => x.TheLoaiId == theLoaiId.Value);
+            }
+
+            var dsSach = await query
+                .OrderByDescending(x => x.Id)
+                .ToListAsync();
+
+            ViewBag.TheLoais = await _context.TheLoais.ToListAsync();
+            ViewBag.TuKhoa = tuKhoa;
+            ViewBag.TheLoaiId = theLoaiId;
+
+            return View("LandingPage", dsSach);
         }
     }
 }

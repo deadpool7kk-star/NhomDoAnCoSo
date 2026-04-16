@@ -1,119 +1,301 @@
-﻿<!DOCTYPE html>
+﻿@model IEnumerable<Book2.Models.Sach>
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Trang chủ";
+
+    var theLoais = ViewBag.TheLoais as List<Book2.Models.TheLoai> ?? new List<Book2.Models.TheLoai>();
+    var sachNoiBat = Model?.Take(8).ToList() ?? new List<Book2.Models.Sach>();
+    var sachMoi = Model?.OrderByDescending(x => x.Id).Take(8).ToList() ?? new List<Book2.Models.Sach>();
+}
+
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FrancisBooks – Nhà sách trực tuyến</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/css/landingPage.css" />
+    <link rel="stylesheet" href="~/css/LandingPage.css" asp-append-version="true" />
 </head>
 <body>
 
-    <!-- NAV -->
     <nav>
-        <a href="#" class="logo"><span class="logo-leaf"></span> Francis<span>Books</span></a>
+        <a asp-controller="Home" asp-action="Index" class="logo">
+            <span class="logo-leaf">📚</span> Francis<span>Books</span>
+        </a>
+
         <ul>
-            <li><a href="#">Trang chủ</a></li>
+            <li><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
             <li><a href="#categories">Thể loại</a></li>
             <li><a href="#featured">Nổi bật</a></li>
             <li><a href="#new">Mới nhất</a></li>
-            <li><a href="#">Khuyến mãi</a></li>
         </ul>
+
         <div class="nav-actions">
-            <div class="nav-search">
+            <form method="get" asp-controller="Home" asp-action="Index" class="nav-search">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.35-4.35" />
                 </svg>
-                <input type="text" placeholder="Tìm sách, tác giả..." />
-            </div>
-            <button class="btn-cart" onclick="showToast('Giỏ hàng đang trống.')">
-                 Giỏ hàng
-                <span class="cart-badge" id="cartCount">0</span>
-            </button>
+                <input type="text" name="tuKhoa" value="@ViewBag.TuKhoa" placeholder="Tìm sách, tác giả..." />
+            </form>
+
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                @await Component.InvokeAsync("GioHang")
+            }
+            else
+            {
+                <a asp-area="Identity" asp-page="/Account/Login" class="btn-cart" style="text-decoration:none;">
+                    Đăng nhập
+                </a>
+            }
         </div>
     </nav>
 
-    <!-- HERO -->
     <section class="hero">
         <div class="hero-text fade-up">
             <span class="hero-badge">🌱 Khai trương ưu đãi – Giảm đến 40%</span>
             <h1>Mỗi cuốn sách<br>là một <em>hành trình</em><br>mới bắt đầu</h1>
-            <p>Khám phá hàng nghìn đầu sách chất lượng — từ văn học kinh điển đến sách kỹ năng, khoa học, nghệ thuật và nhiều hơn nữa.</p>
+            <p>
+                Khám phá hàng nghìn đầu sách chất lượng — từ văn học kinh điển đến sách kỹ năng,
+                công nghệ, kinh tế và nhiều hơn nữa.
+            </p>
+
             <div class="hero-btns">
                 <a href="#featured" class="btn-primary">Khám phá ngay →</a>
                 <a href="#categories" class="btn-outline">Xem thể loại</a>
             </div>
-            
+
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-num">@Model.Count()</span>
+                    <span class="stat-label">Đầu sách</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-num">@theLoais.Count</span>
+                    <span class="stat-label">Thể loại</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-num">100%</span>
+                    <span class="stat-label">Chính hãng</span>
+                </div>
+            </div>
         </div>
-        
+
+        <div class="hero-image fade-up delay-1">
+            <div class="hero-books">
+                @foreach (var item in sachNoiBat.Take(3))
+                {
+                    <a asp-controller="Sach" asp-action="ChiTiet" asp-route-id="@item.Id" class="hero-book" style="text-decoration:none;">
+                        @if (!string.IsNullOrEmpty(item.HinhAnh))
+                        {
+                            <img src="@item.HinhAnh" alt="@item.TenSach" class="book-card-img" />
+                        }
+                        else
+                        {
+                            <div class="book-cover" style="background: linear-gradient(135deg, #4db84d, #237a23);">
+                                <div class="book-cover-title">@item.TenSach</div>
+                            </div>
+                        }
+                    </a>
+                }
+            </div>
+        </div>
     </section>
 
-    <!-- CATEGORIES -->
+    @if (TempData["Success"] != null || TempData["Error"] != null)
+    {
+        <section style="padding-top:20px; padding-bottom:0;">
+            @if (TempData["Success"] != null)
+            {
+                <div style="background:#d1fae5; color:#065f46; padding:12px 16px; border-radius:10px; margin-bottom:12px;">
+                    @TempData["Success"]
+                </div>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                <div style="background:#fee2e2; color:#991b1b; padding:12px 16px; border-radius:10px;">
+                    @TempData["Error"]
+                </div>
+            }
+        </section>
+    }
+
     <section class="categories-bg" id="categories">
         <div class="section-header">
             <h2 class="section-title">Thể loại <span>sách</span></h2>
         </div>
-        <div class="categories-grid" id="catGrid">
-            <a href="#" class="cat-chip active"><span class="cat-icon"></span> Tất cả</a>
-            <a href="#" class="cat-chip"><span class="cat-icon"></span> Văn học</a>
-            <a href="#" class="cat-chip"><span class="cat-icon"></span> Kỹ năng sống</a>
-            <a href="#" class="cat-chip"><span class="cat-icon"></span> Khoa học</a>
-            <a href="#" class="cat-chip"><span class="cat-icon"></span> Kinh doanh</a>
-            <a href="#" class="cat-chip"><span class="cat-icon"></span> Nghệ thuật</a>
-            <a href="#" class="cat-chip"><span class="cat-icon"></span> Lịch sử</a>
-            <a href="#" class="cat-chip"><span class="cat-icon"></span> Thiếu nhi</a>
-            <a href="#" class="cat-chip"><span class="cat-icon"></span> Triết học</a>
+
+        <div class="categories-grid">
+            <a asp-controller="Home"
+               asp-action="Index"
+               asp-route-tuKhoa="@ViewBag.TuKhoa"
+               class="cat-chip @(ViewBag.TheLoaiId == null ? "active" : "")">
+                <span class="cat-icon">📖</span> Tất cả
+            </a>
+
+            @foreach (var item in theLoais)
+            {
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   asp-route-theLoaiId="@item.Id"
+                   asp-route-tuKhoa="@ViewBag.TuKhoa"
+                   class="cat-chip @(ViewBag.TheLoaiId != null && (int)ViewBag.TheLoaiId == item.Id ? "active" : "")">
+                    <span class="cat-icon">📚</span> @item.TenTheLoai
+                </a>
+            }
         </div>
     </section>
 
-    <!-- FEATURED BOOKS -->
     <section id="featured">
         <div class="section-header">
             <h2 class="section-title">Sách <span>nổi bật</span></h2>
-            <a href="#" class="see-all">Xem tất cả →</a>
+            <a asp-controller="Home" asp-action="Index" class="see-all">Xem tất cả →</a>
         </div>
-        <div class="books-grid" id="booksGrid"></div>
+
+        <div class="books-grid">
+            @if (sachNoiBat.Any())
+            {
+                @foreach (var item in sachNoiBat)
+                {
+                    <div class="book-card">
+                        @if (!string.IsNullOrEmpty(item.HinhAnh))
+                        {
+                            <img src="@item.HinhAnh" alt="@item.TenSach" class="book-card-img" />
+                        }
+                        else
+                        {
+                            <div class="book-card-img-placeholder" style="background: linear-gradient(135deg, #4db84d, #237a23);">
+                                @item.TenSach
+                            </div>
+                        }
+
+                        <div class="book-card-body">
+                            <div class="book-genre">
+                                @(item.TheLoai?.TenTheLoai ?? "Chưa có thể loại")
+                            </div>
+
+                            <h3 class="book-title">@item.TenSach</h3>
+                            <p class="book-author">@item.TacGia</p>
+
+                            <div class="book-footer">
+                                <div class="book-price">@item.Gia.ToString("N0") VNĐ</div>
+                                <a asp-controller="Sach"
+                                   asp-action="ChiTiet"
+                                   asp-route-id="@item.Id"
+                                   class="btn-add"
+                                   style="text-decoration:none;">
+                                    Xem chi tiết
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Hiện chưa có sách để hiển thị.</p>
+            }
+        </div>
     </section>
 
-    <!-- PROMO BANNER -->
     <section style="padding: 0 5% 64px;">
         <div class="promo-banner">
             <div class="promo-text">
-                <span class="promo-badge"> Ưu đãi đặc biệt</span>
+                <span class="promo-badge">Ưu đãi đặc biệt</span>
                 <h2>Mua 2 tặng 1<br>mọi đầu sách</h2>
-                <p>Áp dụng cho tất cả sách trong tuần này. Đừng bỏ lỡ cơ hội sở hữu những cuốn sách hay nhất với giá tốt nhất!</p>
+                <p>
+                    Áp dụng cho tất cả sách trong tuần này. Đừng bỏ lỡ cơ hội sở hữu
+                    những cuốn sách hay nhất với giá tốt nhất.
+                </p>
             </div>
-            <a href="#" class="btn-promo">Mua ngay →</a>
+            <a href="#featured" class="btn-promo">Mua ngay →</a>
         </div>
     </section>
 
-    <!-- NEW ARRIVALS -->
     <section id="new" style="background: var(--gray-50);">
         <div class="section-header">
             <h2 class="section-title">Sách <span>mới nhất</span></h2>
-            <a href="#" class="see-all">Xem tất cả →</a>
+            <a asp-controller="Home" asp-action="Index" class="see-all">Xem tất cả →</a>
         </div>
-        <div class="books-grid" id="newBooksGrid"></div>
+
+        <div class="books-grid">
+            @if (sachMoi.Any())
+            {
+                @foreach (var item in sachMoi)
+                {
+                    <div class="book-card">
+                        @if (!string.IsNullOrEmpty(item.HinhAnh))
+                        {
+                            <img src="@item.HinhAnh" alt="@item.TenSach" class="book-card-img" />
+                        }
+                        else
+                        {
+                            <div class="book-card-img-placeholder" style="background: linear-gradient(135deg, #4db84d, #237a23);">
+                                @item.TenSach
+                            </div>
+                        }
+
+                        <div class="book-card-body">
+                            <div class="book-genre">
+                                @(item.TheLoai?.TenTheLoai ?? "Chưa có thể loại")
+                                <span class="badge-new">Mới</span>
+                            </div>
+
+                            <h3 class="book-title">@item.TenSach</h3>
+                            <p class="book-author">@item.TacGia</p>
+
+                            <div class="book-footer">
+                                <div class="book-price">@item.Gia.ToString("N0") VNĐ</div>
+                                <a asp-controller="Sach"
+                                   asp-action="ChiTiet"
+                                   asp-route-id="@item.Id"
+                                   class="btn-add"
+                                   style="text-decoration:none;">
+                                    Xem chi tiết
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Hiện chưa có sách mới.</p>
+            }
+        </div>
     </section>
 
-    
-    <!-- FOOTER -->
     <footer>
         <div class="footer-grid">
             <div class="footer-brand">
-                <a href="#" class="logo"> Francis <span style="color:var(--green-200)">Books</span></a>
-                <p>Nhà sách trực tuyến uy tín, mang đến trải nghiệm đọc sách tuyệt vời cho mọi người Việt Nam.</p>
+                <a asp-controller="Home" asp-action="Index" class="logo">
+                    Francis <span style="color:var(--green-200)">Books</span>
+                </a>
+                <p>
+                    Nhà sách trực tuyến uy tín, mang đến trải nghiệm đọc sách tuyệt vời
+                    cho mọi người Việt Nam.
+                </p>
             </div>
+
             <div class="footer-col">
                 <h4>Danh mục</h4>
                 <ul>
-                    <li><a href="#">Văn học</a></li>
-                    <li><a href="#">Kỹ năng sống</a></li>
-                    <li><a href="#">Khoa học</a></li>
-                    <li><a href="#">Thiếu nhi</a></li>
+                    @foreach (var item in theLoais.Take(4))
+                    {
+                        <li>
+                            <a asp-controller="Home" asp-action="Index" asp-route-theLoaiId="@item.Id">
+                                @item.TenTheLoai
+                            </a>
+                        </li>
+                    }
                 </ul>
             </div>
+
             <div class="footer-col">
                 <h4>Hỗ trợ</h4>
                 <ul>
@@ -123,25 +305,30 @@
                     <li><a href="#">Liên hệ</a></li>
                 </ul>
             </div>
+
             <div class="footer-col">
-                <h4>Về chúng tôi</h4>
+                <h4>Tài khoản</h4>
                 <ul>
-                    <li><a href="#">Giới thiệu</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Tuyển dụng</a></li>
-                    <li><a href="#">Đối tác</a></li>
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <li><a asp-controller="GioHang" asp-action="Index">Giỏ hàng</a></li>
+                        <li><a asp-controller="DatHang" asp-action="LichSu">Đơn hàng</a></li>
+                    }
+                    else
+                    {
+                        <li><a asp-area="Identity" asp-page="/Account/Login">Đăng nhập</a></li>
+                        <li><a asp-area="Identity" asp-page="/Account/Register">Đăng ký</a></li>
+                    }
                 </ul>
             </div>
         </div>
+
         <div class="footer-bottom">
             <span>© 2026 Francis Books. Bảo lưu mọi quyền.</span>
             <span>🌿 Yêu sách • Yêu tri thức</span>
         </div>
     </footer>
 
-    <!-- TOAST -->
-    <div class="toast" id="toast">✅ <span id="toastMsg"></span></div>
-
-    <script src="/js/LandingPage.js"></script>
+    <script src="~/js/LandingPage.js" asp-append-version="true"></script>
 </body>
 </html>

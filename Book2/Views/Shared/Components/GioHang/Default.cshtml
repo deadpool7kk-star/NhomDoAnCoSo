@@ -1,0 +1,10 @@
+﻿@model int
+
+<a asp-controller="GioHang" asp-action="Index" class="btn-cart" style="text-decoration:none;">
+    Giỏ hàng
+
+    @if (Model > 0)
+    {
+        <span class="cart-badge">@Model</span>
+    }
+</a>

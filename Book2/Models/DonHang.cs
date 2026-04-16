@@ -29,6 +29,6 @@ namespace Book2.Models
         [StringLength(50)]
         public string TrangThai { get; set; } = "Chờ xác nhận";
 
-        public ICollection<ChiTietDonHang>? ChiTietDonHangs { get; set; }
+        public ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; } = new List<ChiTietDonHang>();
     }
 }
