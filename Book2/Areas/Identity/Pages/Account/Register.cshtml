@@ -1,64 +1,63 @@
-﻿@page
+@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Đăng ký";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Email</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.Password">Password</label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
+<div class="container d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 200px); padding: 40px 0;">
+    <div class="card border-0 shadow-lg" style="width: 100%; max-width: 450px; border-radius: 16px; overflow: hidden;">
+        <div class="card-header bg-white border-0 text-center pt-4 pb-0">
+            <h2 class="fw-bold" style="font-family: 'Merriweather', serif; color: var(--primary-color);">FrancisBooks</h2>
+            <p class="text-muted mb-0">Tạo tài khoản mới</p>
+        </div>
+        <div class="card-body p-4 p-md-5">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+                
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control rounded-pill px-4" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                    <label asp-for="Input.Email" class="px-4">Email</label>
+                    <span asp-validation-for="Input.Email" class="text-danger ms-3"></span>
+                </div>
+                
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Password" class="form-control rounded-pill px-4" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.Password" class="px-4">Mật khẩu</label>
+                    <span asp-validation-for="Input.Password" class="text-danger ms-3"></span>
+                </div>
+                
+                <div class="form-floating mb-4">
+                    <input asp-for="Input.ConfirmPassword" class="form-control rounded-pill px-4" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.ConfirmPassword" class="px-4">Xác nhận mật khẩu</label>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger ms-3"></span>
+                </div>
+                
+                <button id="registerSubmit" type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold text-white mb-4" style="border: none; font-size: 1.1rem;">
+                    Đăng ký
+                </button>
+                
+                <div class="text-center text-muted">
+                    Đã có tài khoản? <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="text-decoration-none fw-bold">Đăng nhập</a>
+                </div>
+            </form>
+            
+            @if ((Model.ExternalLogins?.Count ?? 0) > 0)
+            {
+                <div class="text-center my-3">
+                    <span class="text-muted" style="font-size: 0.85rem;">HOẶC ĐĂNG KÝ BẰNG</span>
+                </div>
+                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="d-flex justify-content-center gap-2">
+                    @foreach (var provider in Model.ExternalLogins!)
+                    {
+                        <button type="submit" class="btn btn-outline-secondary rounded-circle" name="provider" value="@provider.Name" title="Đăng ký bằng @provider.DisplayName" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                            @if (provider.DisplayName == "Google") { <i class="bi bi-google"></i> }
+                            else if (provider.DisplayName == "Facebook") { <i class="bi bi-facebook"></i> }
+                            else { @provider.DisplayName }
+                        </button>
+                    }
+                </form>
             }
-        </section>
+        </div>
     </div>
 </div>
 

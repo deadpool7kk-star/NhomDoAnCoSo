@@ -19,12 +19,21 @@ namespace Book2.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Gia { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal? GiaGoc { get; set; }
+
+        public int? PhanTramGiam { get; set; }
+
         [Required(ErrorMessage = "Số lượng không được để trống")]
         public int SoLuong { get; set; }
 
         public string? MoTa { get; set; }
 
         public string? HinhAnh { get; set; }
+
+        public DateTime NgayTao { get; set; } = DateTime.Now;
+
+        public bool NoiBat { get; set; } = false;
 
         [Required]
         public int TheLoaiId { get; set; }

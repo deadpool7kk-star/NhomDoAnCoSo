@@ -20,7 +20,14 @@ namespace Book2.Controllers
 
         private string GetUserId()
         {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new UnauthorizedAccessException("Không xác định được người dùng.");
+            }
+
+            return userId;
         }
 
         private async Task<GioHang?> GetGioHangAsync()
@@ -117,40 +124,53 @@ namespace Book2.Controllers
                 }
             }
 
-            var donHang = new DonHang
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
             {
-                UserId = GetUserId(),
-                TenNguoiNhan = model.TenNguoiNhan,
-                SoDienThoai = model.SoDienThoai,
-                DiaChiNhanHang = model.DiaChiNhanHang,
-                NgayDat = DateTime.Now,
-                TongTien = model.TongTien,
-                TrangThai = "Chờ xác nhận"
-            };
-
-            _context.DonHangs.Add(donHang);
-            await _context.SaveChangesAsync();
-
-            foreach (var item in gioHang.ChiTietGioHangs)
-            {
-                var sach = item.Sach!;
-
-                _context.ChiTietDonHangs.Add(new ChiTietDonHang
+                var donHang = new DonHang
                 {
-                    DonHangId = donHang.Id,
-                    SachId = item.SachId,
-                    SoLuong = item.SoLuong,
-                    DonGia = sach.Gia
-                });
+                    UserId = GetUserId(),
+                    TenNguoiNhan = model.TenNguoiNhan,
+                    SoDienThoai = model.SoDienThoai,
+                    DiaChiNhanHang = model.DiaChiNhanHang,
+                    NgayDat = DateTime.Now,
+                    TongTien = model.TongTien,
+                    TrangThai = "Chờ xác nhận"
+                };
 
-                sach.SoLuong -= item.SoLuong;
+                _context.DonHangs.Add(donHang);
+                await _context.SaveChangesAsync();
+
+                foreach (var item in gioHang.ChiTietGioHangs)
+                {
+                    var sach = item.Sach!;
+
+                    _context.ChiTietDonHangs.Add(new ChiTietDonHang
+                    {
+                        DonHangId = donHang.Id,
+                        SachId = item.SachId,
+                        SoLuong = item.SoLuong,
+                        DonGia = sach.Gia
+                    });
+
+                    sach.SoLuong -= item.SoLuong;
+                }
+
+                _context.ChiTietGioHangs.RemoveRange(gioHang.ChiTietGioHangs);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                TempData["Success"] = "Đặt hàng thành công.";
+                return RedirectToAction("DatHangThanhCong");
             }
-
-            _context.ChiTietGioHangs.RemoveRange(gioHang.ChiTietGioHangs);
-            await _context.SaveChangesAsync();
-
-            TempData["Success"] = "Đặt hàng thành công.";
-            return RedirectToAction("DatHangThanhCong");
+            catch
+            {
+                await transaction.RollbackAsync();
+                TempData["Error"] = "Có lỗi xảy ra khi đặt hàng.";
+                return RedirectToAction("Index", "GioHang");
+            }
         }
 
         [HttpGet]
@@ -259,34 +279,46 @@ namespace Book2.Controllers
                 return RedirectToAction("ChiTiet", "Sach", new { id = sachId });
             }
 
-            var donHang = new DonHang
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
             {
-                UserId = GetUserId(),
-                TenNguoiNhan = model.TenNguoiNhan,
-                SoDienThoai = model.SoDienThoai,
-                DiaChiNhanHang = model.DiaChiNhanHang,
-                NgayDat = DateTime.Now,
-                TongTien = model.TongTien,
-                TrangThai = "Chờ xác nhận"
-            };
+                var donHang = new DonHang
+                {
+                    UserId = GetUserId(),
+                    TenNguoiNhan = model.TenNguoiNhan,
+                    SoDienThoai = model.SoDienThoai,
+                    DiaChiNhanHang = model.DiaChiNhanHang,
+                    NgayDat = DateTime.Now,
+                    TongTien = model.TongTien,
+                    TrangThai = "Chờ xác nhận"
+                };
 
-            _context.DonHangs.Add(donHang);
-            await _context.SaveChangesAsync();
+                _context.DonHangs.Add(donHang);
+                await _context.SaveChangesAsync();
 
-            _context.ChiTietDonHangs.Add(new ChiTietDonHang
+                _context.ChiTietDonHangs.Add(new ChiTietDonHang
+                {
+                    DonHangId = donHang.Id,
+                    SachId = sach.Id,
+                    SoLuong = soLuong,
+                    DonGia = sach.Gia
+                });
+
+                sach.SoLuong -= soLuong;
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                TempData["Success"] = "Mua ngay thành công.";
+                return RedirectToAction("DatHangThanhCong");
+            }
+            catch
             {
-                DonHangId = donHang.Id,
-                SachId = sach.Id,
-                SoLuong = soLuong,
-                DonGia = sach.Gia
-            });
-
-            sach.SoLuong -= soLuong;
-
-            await _context.SaveChangesAsync();
-
-            TempData["Success"] = "Mua ngay thành công.";
-            return RedirectToAction("DatHangThanhCong");
+                await transaction.RollbackAsync();
+                TempData["Error"] = "Có lỗi xảy ra khi mua ngay.";
+                return RedirectToAction("ChiTiet", "Sach", new { id = sachId });
+            }
         }
 
         public IActionResult DatHangThanhCong()

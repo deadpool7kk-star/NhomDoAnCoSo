@@ -35,7 +35,7 @@
                                 <th>Tên sách</th>
                                 <th>Tác giả</th>
                                 <th>Giá</th>
-                                <th style="width: 180px;">Số lượng</th>
+                                <th style="width: 220px;">Số lượng</th>
                                 <th>Thành tiền</th>
                                 <th>Xóa</th>
                             </tr>
@@ -62,14 +62,16 @@
                                     </td>
 
                                     <td>
-                                        <form asp-action="CapNhatSoLuong" method="post" class="d-flex gap-2">
+                                        <form asp-action="CapNhatSoLuong" method="post" class="d-flex gap-2 flex-column">
                                             @Html.AntiForgeryToken()
                                             <input type="hidden" name="chiTietGioHangId" value="@item.ChiTietGioHangId" />
                                             <input type="number"
                                                    name="soLuong"
                                                    value="@item.SoLuong"
-                                                   min="1"
+                                                   min="0"
+                                                   max="99"
                                                    class="form-control" />
+                                            <small class="text-muted">Nhập 0 để xóa sản phẩm</small>
                                             <button type="submit" class="btn btn-warning btn-sm">
                                                 Cập nhật
                                             </button>

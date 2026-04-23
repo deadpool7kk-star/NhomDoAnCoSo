@@ -30,6 +30,9 @@ namespace Book2.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    HoTen = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DiaChi = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    NgaySinh = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -211,9 +214,13 @@ namespace Book2.Migrations
                     TenSach = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     TacGia = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     Gia = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    GiaGoc = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PhanTramGiam = table.Column<int>(type: "int", nullable: true),
                     SoLuong = table.Column<int>(type: "int", nullable: false),
                     MoTa = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HinhAnh = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayTao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NoiBat = table.Column<bool>(type: "bit", nullable: false),
                     TheLoaiId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

@@ -6,7 +6,6 @@ namespace Book2.Data
     {
         public static void Seed(ApplicationDbContext context)
         {
-            // Nếu đã có dữ liệu thể loại thì không seed lại
             if (context.TheLoais.Any() || context.Saches.Any())
             {
                 return;
@@ -51,120 +50,168 @@ namespace Book2.Data
                     TenSach = "Nhà Giả Kim",
                     TacGia = "Paulo Coelho",
                     Gia = 79000,
+                    GiaGoc = 99000,
+                    PhanTramGiam = 20,
                     SoLuong = 20,
                     MoTa = "Một cuốn tiểu thuyết nổi tiếng về hành trình theo đuổi ước mơ.",
                     HinhAnh = "/images/Nha-gia-kim.jpg",
-                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Văn học").Id
+                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Văn học").Id,
+                    NgayTao = DateTime.Now.AddDays(-5),
+                    NoiBat = true
                 },
                 new Sach
                 {
                     TenSach = "Tuổi Trẻ Đáng Giá Bao Nhiêu",
                     TacGia = "Rosie Nguyễn",
                     Gia = 85000,
+                    GiaGoc = 100000,
+                    PhanTramGiam = 15,
                     SoLuong = 15,
                     MoTa = "Cuốn sách truyền cảm hứng cho người trẻ về học tập, trải nghiệm và trưởng thành.",
                     HinhAnh = "/images/Tuoi-tre-dang-gia-bao-nhieu.jpg",
-                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Kỹ năng sống").Id
+                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Kỹ năng sống").Id,
+                    NgayTao = DateTime.Now.AddDays(-3),
+                    NoiBat = true
                 },
                 new Sach
                 {
                     TenSach = "Đắc Nhân Tâm",
                     TacGia = "Dale Carnegie",
                     Gia = 92000,
+                    GiaGoc = 110000,
+                    PhanTramGiam = 16,
                     SoLuong = 25,
                     MoTa = "Cuốn sách kinh điển về nghệ thuật giao tiếp và ứng xử.",
                     HinhAnh = "/images/Dac-nhan-tam.jpg",
-                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Kỹ năng sống").Id
+                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Kỹ năng sống").Id,
+                    NgayTao = DateTime.Now.AddDays(-10),
+                    NoiBat = true
                 },
                 new Sach
                 {
                     TenSach = "Lập Trình C# Cơ Bản",
                     TacGia = "Nguyễn Văn A",
                     Gia = 120000,
+                    GiaGoc = 140000,
+                    PhanTramGiam = 14,
                     SoLuong = 12,
                     MoTa = "Sách dành cho người mới bắt đầu học lập trình C#.",
                     HinhAnh = "/images/lap-trinh-c-co-ban.jpg",
-                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Công nghệ thông tin").Id
+                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Công nghệ thông tin").Id,
+                    NgayTao = DateTime.Now.AddDays(-1),
+                    NoiBat = false
                 },
                 new Sach
                 {
                     TenSach = "ASP.NET Core MVC Từ Cơ Bản Đến Nâng Cao",
                     TacGia = "Trần Minh Khang",
                     Gia = 145000,
+                    GiaGoc = 170000,
+                    PhanTramGiam = 15,
                     SoLuong = 10,
                     MoTa = "Hướng dẫn xây dựng ứng dụng web với ASP.NET Core MVC.",
                     HinhAnh = "/images/Asp.net-core-co-ban.jpg",
-                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Công nghệ thông tin").Id
+                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Công nghệ thông tin").Id,
+                    NgayTao = DateTime.Now.AddDays(-2),
+                    NoiBat = true
                 },
                 new Sach
                 {
                     TenSach = "Cha Giàu Cha Nghèo",
                     TacGia = "Robert Kiyosaki",
                     Gia = 99000,
+                    GiaGoc = 119000,
+                    PhanTramGiam = 17,
                     SoLuong = 18,
                     MoTa = "Cuốn sách nổi tiếng về tư duy tài chính cá nhân.",
                     HinhAnh = "/images/Cha-giau-cha-ngheo.jpg",
-                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Kinh tế").Id
+                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Kinh tế").Id,
+                    NgayTao = DateTime.Now.AddDays(-7),
+                    NoiBat = true
                 },
                 new Sach
                 {
                     TenSach = "Dạy Con Làm Giàu",
                     TacGia = "Robert Kiyosaki",
                     Gia = 105000,
+                    GiaGoc = 125000,
+                    PhanTramGiam = 16,
                     SoLuong = 14,
                     MoTa = "Bộ sách hướng dẫn tư duy tài chính và đầu tư.",
                     HinhAnh = "/images/Day-con-lam-giau.jpg",
-                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Kinh tế").Id
+                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Kinh tế").Id,
+                    NgayTao = DateTime.Now.AddDays(-4),
+                    NoiBat = false
                 },
                 new Sach
                 {
                     TenSach = "Tôi Thấy Hoa Vàng Trên Cỏ Xanh",
                     TacGia = "Nguyễn Nhật Ánh",
                     Gia = 88000,
+                    GiaGoc = 98000,
+                    PhanTramGiam = 10,
                     SoLuong = 17,
                     MoTa = "Tác phẩm nổi tiếng của Nguyễn Nhật Ánh về tuổi thơ và ký ức.",
                     HinhAnh = "/images/Toi-thay-hoa-vang-tren-co-xanh.jpg",
-                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Văn học").Id
+                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Văn học").Id,
+                    NgayTao = DateTime.Now.AddDays(-6),
+                    NoiBat = false
                 },
                 new Sach
                 {
                     TenSach = "Cho Tôi Xin Một Vé Đi Tuổi Thơ",
                     TacGia = "Nguyễn Nhật Ánh",
                     Gia = 76000,
+                    GiaGoc = 90000,
+                    PhanTramGiam = 15,
                     SoLuong = 19,
                     MoTa = "Câu chuyện nhẹ nhàng, sâu sắc về tuổi thơ.",
                     HinhAnh = "/images/Cho-toi-xin-mot-ve-di-tuoi-tho.jpg",
-                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Văn học").Id
+                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Văn học").Id,
+                    NgayTao = DateTime.Now.AddDays(-8),
+                    NoiBat = false
                 },
                 new Sach
                 {
                     TenSach = "Dế Mèn Phiêu Lưu Ký",
                     TacGia = "Tô Hoài",
                     Gia = 65000,
+                    GiaGoc = 80000,
+                    PhanTramGiam = 19,
                     SoLuong = 30,
                     MoTa = "Tác phẩm thiếu nhi kinh điển của văn học Việt Nam.",
                     HinhAnh = "/images/De-men-phieu-luu-ky.jpg",
-                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Thiếu nhi").Id
+                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Thiếu nhi").Id,
+                    NgayTao = DateTime.Now.AddDays(-9),
+                    NoiBat = true
                 },
                 new Sach
                 {
                     TenSach = "Harry Potter Và Hòn Đá Phù Thủy",
                     TacGia = "J.K. Rowling",
                     Gia = 135000,
+                    GiaGoc = 155000,
+                    PhanTramGiam = 13,
                     SoLuong = 16,
                     MoTa = "Phần đầu tiên trong series Harry Potter nổi tiếng.",
                     HinhAnh = "/images/Harry-potter-Va-hon-da-phu-thuy.jpg",
-                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Thiếu nhi").Id
+                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Thiếu nhi").Id,
+                    NgayTao = DateTime.Now.AddDays(-11),
+                    NoiBat = true
                 },
                 new Sach
                 {
                     TenSach = "Clean Code",
                     TacGia = "Robert C. Martin",
                     Gia = 210000,
+                    GiaGoc = 250000,
+                    PhanTramGiam = 16,
                     SoLuong = 8,
                     MoTa = "Cuốn sách kinh điển dành cho lập trình viên về viết mã sạch.",
                     HinhAnh = "/images/Clean-Code.jpg",
-                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Công nghệ thông tin").Id
+                    TheLoaiId = theLoais.First(x => x.TenTheLoai == "Công nghệ thông tin").Id,
+                    NgayTao = DateTime.Now.AddDays(-12),
+                    NoiBat = true
                 }
             };
 
