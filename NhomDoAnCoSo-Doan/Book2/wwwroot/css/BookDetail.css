@@ -1,0 +1,588 @@
+/* General Page */
+.alpha-detail-page {
+    background-color: #f5f5fa; /* Subtle grey typical of VN e-commerce */
+    min-height: 100vh;
+}
+
+/* Breadcrumb */
+.alpha-breadcrumb {
+    font-size: 14px;
+    margin-bottom: 0;
+}
+.alpha-breadcrumb a {
+    color: #007bff;
+    text-decoration: none;
+}
+.alpha-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/* Top Block */
+.alpha-top-block {
+    background: #fff;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.1), 0 2px 6px 2px rgba(60,64,67,0.15);
+}
+
+/* Image Box */
+.alpha-image-box {
+    text-align: center;
+    border: 1px solid #eee;
+    padding: 20px;
+    border-radius: 8px;
+    background: #fff;
+}
+.alpha-main-img {
+    max-width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+}
+
+/* Preview Button */
+.alpha-btn-preview {
+    border: 1px solid #007bff;
+    color: #007bff;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: all 0.2s;
+    background: #fff;
+    padding: 10px;
+}
+.alpha-btn-preview:hover {
+    background: #007bff;
+    color: #fff;
+}
+
+/* Info Box */
+.alpha-info-box {
+    padding-left: 20px;
+}
+
+.alpha-book-title {
+    font-family: 'Merriweather', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.4;
+    margin-bottom: 16px;
+}
+
+/* Meta Data */
+.alpha-book-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 14px;
+}
+.meta-label {
+    color: #787878;
+}
+.meta-value {
+    color: #333;
+    font-weight: 600;
+}
+
+/* Price Box */
+.alpha-price-box {
+    background: #fafafa;
+    border-radius: 4px;
+    padding: 16px;
+    margin-top: 16px;
+}
+.alpha-current-price {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ff424e; /* Tiki/Shopee style red */
+    line-height: 1;
+}
+.alpha-old-price {
+    font-size: 14px;
+    color: #808089;
+    text-decoration: line-through;
+    margin-bottom: 4px;
+}
+.alpha-discount-badge {
+    background: #ff424e;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+}
+
+/* Promo Box */
+.alpha-promo-box {
+    border: 1px dashed #007bff;
+    border-radius: 8px;
+    padding: 16px;
+    background: #f0f8ff;
+}
+.promo-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #007bff;
+    margin-bottom: 12px;
+}
+.promo-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+    font-size: 14px;
+    color: #333;
+}
+.promo-list li {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+/* Action Box */
+.alpha-action-box {
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+}
+.action-grid {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+}
+
+/* Quantity Selector */
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    height: 44px;
+    overflow: hidden;
+    background: #fff;
+}
+.qty-btn {
+    width: 36px;
+    height: 100%;
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    color: #666;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.qty-btn:hover {
+    background: #f5f5f5;
+}
+.qty-input {
+    width: 50px;
+    height: 100%;
+    border: none;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    text-align: center;
+    font-weight: 600;
+    outline: none;
+    -moz-appearance: textfield;
+}
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Buttons */
+.alpha-btn-cart {
+    background: #fff;
+    border: 1px solid #007bff;
+    color: #007bff;
+    height: 44px;
+    font-weight: 600;
+    border-radius: 4px;
+    flex: 1;
+    transition: all 0.2s;
+}
+.alpha-btn-cart:hover {
+    background: #e6f2ff;
+}
+
+.alpha-btn-buy {
+    background: #ff424e;
+    color: #fff;
+    height: 48px;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+.alpha-btn-buy:hover {
+    background: #e03540;
+    color: #fff;
+}
+
+.alpha-btn-login {
+    background: #fdd835;
+    color: #333;
+    font-weight: 700;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    text-decoration: none;
+}
+.alpha-btn-login:hover {
+    background: #fbc02d;
+    color: #000;
+}
+
+/* Bottom Block */
+.alpha-bottom-block {
+    background: #fff;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.1);
+}
+
+.alpha-nav-tabs {
+    border-bottom: none;
+    margin-bottom: 24px;
+    gap: 12px; /* Khoảng cách giữa 2 tab */
+}
+.alpha-nav-tabs .nav-item {
+    margin-bottom: 0;
+}
+.alpha-nav-tabs .nav-link {
+    border: none;
+    color: #6b7280; /* Màu xám thanh lịch */
+    font-weight: 600;
+    font-size: 16px;
+    padding: 10px 24px;
+    border-radius: 12px; /* Bo góc mềm mại */
+    background: transparent;
+    transition: all 0.25s ease;
+}
+.alpha-nav-tabs .nav-link:hover {
+    background: #f5fbf5; /* Nền xanh lục cực nhạt khi rê chuột */
+    color: #2ea043;
+}
+.alpha-nav-tabs .nav-link.active {
+    background: #e1f4e1; /* Nền xanh lục Pastel dịu mắt */
+    color: #2ea043; /* Chữ màu xanh đậm nổi bật */
+    font-weight: 700;
+}
+.alpha-nav-tabs .nav-link.active::after {
+    display: none;
+}
+
+.alpha-tab-content .content-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    white-space: pre-wrap;
+}
+
+.alpha-detail-table th {
+    background: #fafafa;
+    color: #555;
+    font-weight: 600;
+}
+
+/* Related Books */
+.alpha-related-section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.1);
+}
+.related-title {
+    font-family: 'Merriweather', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Related Books (from previous styling) */
+.related-book-card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 12px;
+    transition: box-shadow 0.2s, transform 0.2s;
+    background: #fff;
+}
+.related-book-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+.related-book-img-wrap {
+    text-align: center;
+    margin-bottom: 12px;
+}
+.related-book-img {
+    height: 180px;
+    object-fit: contain;
+}
+.related-book-name {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    height: 40px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+.related-book-name a {
+    color: #333;
+}
+.related-book-name a:hover {
+    color: #007bff;
+}
+.related-book-author {
+    font-size: 12px;
+    color: #808089;
+    margin-bottom: 8px;
+}
+.related-book-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ff424e;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .alpha-info-box {
+        padding-left: 0;
+        margin-top: 24px;
+    }
+}
+
+/* Flipbook Fullscreen Modal */
+.preview-modal-fullscreen {
+    background: rgba(15, 23, 42, 0.98) !important; /* Dark slate overlay */
+    backdrop-filter: blur(8px);
+    border: none;
+}
+
+#modalDocThu {
+    z-index: 1150 !important; /* Đè lên sticky header có z-index 1100 */
+}
+
+.preview-header-dark {
+    background: transparent;
+    padding: 16px 24px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1055;
+}
+
+.btn-close-white {
+    filter: invert(1) grayscale(100%) brightness(200%);
+    opacity: 0.8;
+}
+.btn-close-white:hover {
+    opacity: 1;
+}
+
+.preview-body-dark {
+    padding: 0;
+    height: 100vh;
+.preview-stage-dark {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 60px; /* Space for arrows */
+}
+
+#flipbook {
+    margin: 0 auto;
+    transition: transform 0.4s ease-in-out;
+}
+
+#flipbook .page {
+    background: #fff;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+}
+
+#flipbook .page-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+}
+
+#flipbook .page img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    pointer-events: none; /* Ngăn trình duyệt kéo thả ảnh (ghost drag) */
+    user-select: none;
+}
+
+/* Nav Buttons */
+.preview-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 1050;
+}
+.preview-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-50%) scale(1.1);
+}
+.prev-btn {
+    left: 30px;
+}
+.next-btn {
+    right: 30px;
+}
+
+/* Bottom Toolbar */
+.preview-toolbar-dark {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 1050;
+    pointer-events: none; /* Let clicks pass through */
+}
+
+.page-indicator-badge {
+    display: inline-block;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(4px);
+}
+
+@media (max-width: 768px) {
+    .preview-stage-dark {
+        padding: 40px 10px;
+    }
+    .preview-nav-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+    }
+    .prev-btn { left: 10px; }
+    .next-btn { right: 10px; }
+}
+
+/*css của nút xem thêm rút gọn*/
+/* ====== BOX CHUNG ====== */
+.alpha-info-box,
+.alpha-bottom-block,
+.alpha-related-section {
+    background: #ffffff;
+    border: 1px solid #d4edda; /* xanh lá nhạt */
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+    /* Hover sáng lên */
+    .alpha-info-box:hover,
+    .alpha-bottom-block:hover,
+    .alpha-related-section:hover {
+        box-shadow: 0 8px 25px rgba(0, 128, 0, 0.08);
+        transform: translateY(-2px);
+    }
+
+/* ====== TAB ====== */
+.alpha-nav-tabs .nav-link {
+    color: #2e7d32;
+    font-weight: 500;
+    border: none;
+}
+
+    .alpha-nav-tabs .nav-link.active {
+        color: #ffffff;
+        background: #4caf50;
+        border-radius: 8px 8px 0 0;
+    }
+
+/* ====== TABLE ====== */
+.alpha-detail-table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+    .alpha-detail-table th {
+        background: #f1f8f4;
+        color: #2e7d32;
+        font-weight: 600;
+    }
+
+    .alpha-detail-table td {
+        background: #ffffff;
+    }
+
+    /* hover row */
+    .alpha-detail-table tr:hover td {
+        background: #f9fff9;
+    }
+
+/* ====== BUTTON ====== */
+.alpha-btn-cart {
+    background: #4caf50;
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+    transition: all 0.3s;
+}
+
+    .alpha-btn-cart:hover {
+        background: #43a047;
+        box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+    }
+
+.alpha-btn-buy {
+    background: #2e7d32;
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+}
+
+    .alpha-btn-buy:hover {
+        background: #1b5e20;
+    }
+
+/* ====== MÔ TẢ ====== */
+.desc-wrapper {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #d4edda;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.content-text {
+    line-height: 1.7;
+    color: #333;
+}
+
+/* khi hover cả box */
+.desc-wrapper:hover {
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.1);
+}

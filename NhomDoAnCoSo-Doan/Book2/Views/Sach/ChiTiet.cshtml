@@ -1,0 +1,607 @@
+@model Book2.Models.Sach
+
+@{
+    ViewData["Title"] = Model.TenSach;
+    var sachLienQuan = ViewBag.SachLienQuan as List<Book2.Models.Sach>;
+    var anhDocThu = ViewBag.AnhDocThu as List<string> ?? new List<string>();
+}
+
+<div class="alpha-detail-page py-4">
+    <div class="container" style="max-width: 1200px;">
+        <!-- Breadcrumbs -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb alpha-breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item">
+                    <a asp-controller="Home" asp-action="Index" asp-route-theLoaiId="@Model.TheLoaiId">
+                        @(Model.TheLoai?.TenTheLoai ?? "Thể loại")
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@Model.TenSach</li>
+            </ol>
+        </nav>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success shadow-sm rounded-3 border-0">@TempData["Success"]</div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger shadow-sm rounded-3 border-0">@TempData["Error"]</div>
+        }
+
+        <!-- Top Block: Overview & Buy Actions -->
+        <div class="alpha-top-block mb-5">
+            <div class="row g-4">
+                <!-- Left: Book Cover & Preview -->
+                <div class="col-lg-4 col-md-5">
+                    <div class="alpha-image-box">
+                        <img src="@(string.IsNullOrEmpty(Model.HinhAnh) ? "/images/no-image.png" : Model.HinhAnh)"
+                             alt="@Model.TenSach"
+                             class="alpha-main-img" />
+                    </div>
+
+                    @if (anhDocThu.Any())
+                    {
+                        <button type="button" class="btn alpha-btn-preview mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalDocThu">
+                            <i class="bi bi-book-half"></i> Đọc thử ngay
+                        </button>
+                    }
+                </div>
+
+                <!-- Right: Information & Add to Cart -->
+                <div class="col-lg-8 col-md-7">
+                    <div class="alpha-info-box">
+                        <h1 class="alpha-book-title">@Model.TenSach</h1>
+
+                        <div class="alpha-book-meta mb-3">
+                            <div class="meta-item">
+                                <span class="meta-label">Tác giả:</span> 
+                                <strong class="meta-value">@Model.TacGia</strong>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Thể loại:</span> 
+                                <strong class="meta-value">@(Model.TheLoai?.TenTheLoai ?? "Đang cập nhật")</strong>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Tình trạng:</span>
+                                @if (Model.SoLuong > 10)
+                                {
+                                    <strong class="text-success">Còn hàng (@Model.SoLuong)</strong>
+                                }
+                                else if (Model.SoLuong > 0)
+                                {
+                                    <strong class="text-warning">Sắp hết (@Model.SoLuong)</strong>
+                                }
+                                else
+                                {
+                                    <strong class="text-danger">Hết hàng</strong>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="alpha-price-box">
+                            <div class="d-flex align-items-end gap-3 flex-wrap">
+                                <span class="alpha-current-price">@Model.Gia.ToString("N0")₫</span>
+                                @if (Model.GiaGoc.HasValue && Model.GiaGoc > Model.Gia)
+                                {
+                                    <span class="alpha-old-price">@Model.GiaGoc.Value.ToString("N0")₫</span>
+                                    @if (Model.PhanTramGiam.HasValue && Model.PhanTramGiam > 0)
+                                    {
+                                        <span class="alpha-discount-badge">-@Model.PhanTramGiam%</span>
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                        <div class="alpha-promo-box mt-4">
+                            <h6 class="promo-title"><i class="bi bi-gift"></i> Ưu đãi & Dịch vụ</h6>
+                            <ul class="promo-list">
+                                <li><i class="bi bi-truck text-success"></i> Miễn phí giao hàng toàn quốc cho đơn từ 299.000đ.</li>
+                                <li><i class="bi bi-shield-check text-success"></i> Cam kết sách bản quyền chính hãng 100%.</li>
+                                <li><i class="bi bi-arrow-return-left text-success"></i> Đổi trả trong vòng 7 ngày nếu có lỗi từ nhà xuất bản.</li>
+                            </ul>
+                        </div>
+
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            @if (Model.SoLuong > 0)
+                            {
+                                <div class="alpha-action-box mt-4">
+                                    <form asp-controller="GioHang" asp-action="ThemVaoGio" method="post" id="addToCartForm">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="sachId" value="@Model.Id" />
+                                        
+                                        <div class="action-grid">
+                                            <div class="quantity-selector">
+                                                <button type="button" class="qty-btn" onclick="document.getElementById('qtyInput').stepDown()">-</button>
+                                                <input type="number" id="qtyInput" name="soLuong" value="1" min="1" max="@Model.SoLuong" class="qty-input" />
+                                                <button type="button" class="qty-btn" onclick="document.getElementById('qtyInput').stepUp()">+</button>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn alpha-btn-cart">
+                                                <i class="bi bi-cart-plus me-2"></i> Thêm vào giỏ
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                    <form asp-controller="DatHang" asp-action="MuaNgay" method="get" class="mt-3">
+                                        <input type="hidden" name="sachId" value="@Model.Id" />
+                                        <input type="hidden" name="soLuong" id="buyNowQty" value="1" />
+                                        <button type="submit" class="btn alpha-btn-buy w-100" onclick="document.getElementById('buyNowQty').value = document.getElementById('qtyInput').value">
+                                            <i class="bi bi-lightning-charge-fill me-2"></i> Mua ngay
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-secondary mt-4 border-0 text-center fw-bold">
+                                    Sản phẩm hiện đang tạm hết hàng.
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="mt-4">
+                                <a asp-area="Identity" asp-page="/Account/Login" class="btn alpha-btn-login w-100">
+                                    Đăng nhập để mua hàng
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Block: Tabs (Description & Details) -->
+        <div class="alpha-bottom-block mb-5">
+            <ul class="nav nav-tabs alpha-nav-tabs" id="bookTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="desc-tab" data-bs-toggle="tab" data-bs-target="#desc" type="button" role="tab" aria-selected="true">Mô tả sản phẩm</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="detail-tab" data-bs-toggle="tab" data-bs-target="#detail" type="button" role="tab" aria-selected="false">Thông tin chi tiết</button>
+                </li>
+            </ul>
+            <div class="tab-content alpha-tab-content" id="bookTabsContent">
+                <!-- Description Tab -->
+                <div class="tab-pane fade show active" id="desc" role="tabpanel" aria-labelledby="desc-tab">
+                    <style>
+                        /* Mã CSS được viết trực tiếp tại đây để trình duyệt không thể dùng bản cache cũ */
+                        .desc-container { position: relative; padding-bottom: 5px; }
+                        .desc-content { 
+                            line-height: 1.8; 
+                            color: #444; 
+                            font-size: 15px; 
+                            overflow: hidden; 
+                            transition: max-height 0.5s ease; 
+                            position: relative;
+                            white-space: pre-wrap; /* Giữ nguyên các đoạn xuống dòng của text */
+                        }
+                        .desc-content.collapsed { max-height: 250px; }
+                        .desc-content.expanded { max-height: 15000px; }
+                        
+                        .desc-fade {
+                            position: absolute;
+                            bottom: 45px; left: 0; right: 0; height: 100px;
+                            background: linear-gradient(to bottom, rgba(255,255,255,0), #ffffff);
+                            pointer-events: none;
+                            transition: opacity 0.3s;
+                            z-index: 1;
+                        }
+                        
+                        .btn-toggle-desc {
+                            display: none; /* Sẽ hiện bằng JS nếu nội dung dài */
+                            margin: 10px auto 0;
+                            padding: 7px 50px;
+                            border-radius: 5px;
+                            background: #ffffff;
+                            color: #2ea043; /* Màu xanh lá chuẩn */
+                            border: 1px solid #2ea043;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                            position: relative;
+                            z-index: 2;
+                        }
+                        .btn-toggle-desc:hover { 
+                            background: #f0fdf4; 
+                            color: #1b5e20;
+                            border-color: #1b5e20;
+                            box-shadow: 0 2px 8px rgba(46, 160, 67, 0.15);
+                        }
+                    </style>
+
+                    <div class="desc-container" id="descWrapper">
+                        <div id="descContent" class="desc-content collapsed">
+                            @(string.IsNullOrWhiteSpace(Model.MoTa) ? "Chưa có mô tả cho sách này." : Model.MoTa)
+                        </div>
+                        <div class="desc-fade" id="descOverlay"></div>
+                        <div class="text-center">
+                            <button id="toggleDescBtn" class="btn-toggle-desc">Xem Thêm</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Detail Tab -->
+                <div class="tab-pane fade" id="detail" role="tabpanel" aria-labelledby="detail-tab">
+                    <table class="table table-striped table-bordered alpha-detail-table">
+                        <tbody>
+                            <tr>
+                                <th style="width: 200px;">Tên sách</th>
+                                <td>@Model.TenSach</td>
+                            </tr>
+                            <tr>
+                                <th>Tác giả</th>
+                                <td>@Model.TacGia</td>
+                            </tr>
+                            <!--thuộc tính tôi thêm đây-->
+                            <tr>
+                                <th>Nhà xuất bản</th>
+                                <td>@(string.IsNullOrEmpty(Model.NhaXuatBan) ? "Đang cập nhật" : Model.NhaXuatBan)</td>
+                            </tr>
+
+                            <tr>
+                                <th>Ngày xuất bản</th>
+                                <td>
+                                    @(Model.NgayXuatBan.HasValue
+                                        ? Model.NgayXuatBan.Value.ToString("dd/MM/yyyy")
+                                        : "Đang cập nhật")
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Ngôn ngữ</th>
+                                <td>@(string.IsNullOrEmpty(Model.NgonNgu) ? "Đang cập nhật" : Model.NgonNgu)</td>
+                            </tr>
+
+                            <tr>
+                                <th>Số trang</th>
+                                <td>
+                                    @(Model.SoTrang.HasValue
+                                        ? Model.SoTrang + " trang"
+                                        : "Đang cập nhật")
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Trọng lượng</th>
+                                <td>
+                                    @(Model.TrongLuong.HasValue
+                                        ? $"{Model.TrongLuong:N0} g"
+                                        : "Đang cập nhật")
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Thể loại</th>
+                                <td>@(Model.TheLoai?.TenTheLoai ?? "Đang cập nhật")</td>
+                            </tr>
+                            <tr>
+                                <th>Kho hàng</th>
+                                <td>@Model.SoLuong cuốn</td>
+                            </tr>
+                            <tr>
+                                <th>Định dạng</th>
+                                <td>Bìa mềm</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Books -->
+        @if (sachLienQuan != null && sachLienQuan.Any())
+        {
+            <div class="alpha-related-section">
+                <h3 class="related-title mb-4">Sách cùng thể loại</h3>
+
+                <div class="row g-4">
+                    @foreach (var item in sachLienQuan)
+                    {
+                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6">
+                            <div class="related-book-card h-100">
+                                <div class="related-book-img-wrap">
+                                    <a asp-action="ChiTiet" asp-route-id="@item.Id">
+                                        <img src="@(string.IsNullOrEmpty(item.HinhAnh) ? "/images/no-image.png" : item.HinhAnh)"
+                                             alt="@item.TenSach"
+                                             class="related-book-img" />
+                                    </a>
+                                </div>
+
+                                <div class="related-book-body">
+                                    <h6 class="related-book-name">
+                                        <a asp-action="ChiTiet" asp-route-id="@item.Id" class="text-decoration-none text-dark">
+                                            @item.TenSach
+                                        </a>
+                                    </h6>
+                                    <p class="related-book-author">@item.TacGia</p>
+                                    <div class="related-book-price">@item.Gia.ToString("N0")₫</div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal Đọc thử (turn.js) Fullscreen -->
+@if (anhDocThu.Any())
+{
+    <div class="modal fade" id="modalDocThu" tabindex="-1" aria-labelledby="modalDocThuLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content preview-modal-fullscreen">
+                <div class="modal-header border-0 preview-header-dark">
+                    <h5 class="modal-title text-white fw-bold" id="modalDocThuLabel">
+                        <i class="bi bi-book me-2"></i> @Model.TenSach
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body preview-body-dark position-relative d-flex align-items-center justify-content-center">
+                    
+                    <!-- Left Arrow -->
+                    <button type="button" id="btnPrevPage" class="preview-nav-btn prev-btn">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+
+                    <div class="preview-stage-dark">
+                        <div id="flipbook">
+                            @{
+                                int pageNum = 1;
+                                foreach (var img in anhDocThu)
+                                {
+                                    <div class="page @(pageNum == 1 || pageNum == anhDocThu.Count ? "hard" : "")">
+                                        <div class="page-content">
+                                            <img src="@img" alt="Trang @pageNum" />
+                                        </div>
+                                    </div>
+                                    pageNum++;
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Right Arrow -->
+                    <button type="button" id="btnNextPage" class="preview-nav-btn next-btn">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+
+                    <!-- Page Indicator -->
+                    <div class="preview-toolbar-dark">
+                        <span id="pageIndicator" class="page-indicator-badge">
+                            Trang 1 / @anhDocThu.Count
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/BookDetail.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    @if (anhDocThu.Any())
+    {
+        <script src="~/lib/turnjs/turn.min.js"></script>
+
+        <script>
+            const tongSoTrang = @anhDocThu.Count;
+
+            function layKichThuocFlipbook() {
+                // Kích thước tối ưu cho màn hình
+                const screenWidth = window.innerWidth;
+                const screenHeight = window.innerHeight;
+                
+                // Trừ hao padding và header
+                const availableWidth = screenWidth - 160; 
+                const availableHeight = screenHeight - 160;
+
+                if (screenWidth <= 768) {
+                    // Mobile: hiển thị 1 trang (tỉ lệ 2:3 -> W:H = 1:1.5)
+                    let w = availableWidth;
+                    let h = w * 1.5; 
+                    if (h > availableHeight) {
+                        h = availableHeight;
+                        w = h / 1.5;
+                    }
+                    return { width: Math.round(w), height: Math.round(h), display: 'single' };
+                }
+                else {
+                    // Desktop: hiển thị 2 trang (mỗi trang 2:3 -> tổng 4:3 -> W:H = 1:0.75)
+                    let w = availableWidth;
+                    let h = w * 0.75; 
+                    
+                    if (h > availableHeight) {
+                        h = availableHeight;
+                        w = h / 0.75; 
+                    }
+                    
+                    // Giới hạn kích thước tối đa
+                    if (w > 1200) w = 1200;
+                    if (h > 900) h = 900;
+
+                    return { width: Math.round(w), height: Math.round(h), display: 'double' };
+                }
+            }
+
+            function capNhatTrang() {
+                if ($('#flipbook').data('turn')) {
+                    const view = $('#flipbook').turn('view');
+                    let trangHienThi = view.join(' - ').replace(/^0 - | - 0$/g, '');
+                    if (!trangHienThi) trangHienThi = $('#flipbook').turn('page');
+                    $('#pageIndicator').text(`Trang ${trangHienThi} / ${tongSoTrang}`);
+
+                    // Tự động căn giữa sách một cách hoàn hảo bằng CSS Transform
+                    if ($('#flipbook').turn('display') === 'double') {
+                        if (!view[0]) {
+                            // Trang bìa (chỉ có nửa phải)
+                            $('#flipbook').css('transform', 'translateX(-25%)');
+                        } else if (!view[1]) {
+                            // Bìa sau (chỉ có nửa trái)
+                            $('#flipbook').css('transform', 'translateX(25%)');
+                        } else {
+                            // Mở giữa
+                            $('#flipbook').css('transform', 'translateX(0)');
+                        }
+                    } else {
+                        $('#flipbook').css('transform', 'translateX(0)');
+                    }
+                }
+            }
+
+            function khoiTaoFlipbook() {
+                const flipbook = $('#flipbook');
+                if (!flipbook.length) return;
+
+                const config = layKichThuocFlipbook();
+
+                if (flipbook.data('turn')) {
+                    flipbook.turn('display', config.display);
+                    flipbook.turn('size', config.width, config.height);
+                    capNhatTrang();
+                    return;
+                }
+
+                flipbook.turn({
+                    width: config.width,
+                    height: config.height,
+                    autoCenter: false, // Tắt autoCenter bị lỗi margin-left, tự xử lý bằng JS transform
+                    display: config.display,
+                    gradients: true,
+                    acceleration: true,
+                    elevation: 50,
+                    when: {
+                        turned: function (e, page) {
+                            capNhatTrang();
+                        }
+                    }
+                });
+
+                capNhatTrang();
+                
+                // Bắt sự kiện phím mũi tên
+                $(document).keydown(function(e){
+                    if (!$('#modalDocThu').hasClass('show')) return;
+                    if (e.keyCode == 37) {
+                        $('#flipbook').turn('previous');
+                    }
+                    else if (e.keyCode == 39) {
+                        $('#flipbook').turn('next');
+                    }
+                });
+            }
+
+            const modalDocThu = document.getElementById('modalDocThu');
+
+            if (modalDocThu) {
+                modalDocThu.addEventListener('shown.bs.modal', function () {
+                    // Đợi modal hiển thị hoàn toàn, có kích thước chuẩn
+                    setTimeout(function () {
+                        khoiTaoFlipbook();
+                    }, 200);
+                });
+
+                modalDocThu.addEventListener('hidden.bs.modal', function () {
+                    if ($('#flipbook').data('turn')) {
+                        $('#flipbook').turn('page', 1);
+                        capNhatTrang();
+                    }
+                });
+            }
+
+            $('#btnPrevPage').on('click', function () {
+                if ($('#flipbook').data('turn')) {
+                    $('#flipbook').turn('previous');
+                }
+            });
+
+            $('#btnNextPage').on('click', function () {
+                if ($('#flipbook').data('turn')) {
+                    $('#flipbook').turn('next');
+                }
+            });
+
+            // Tối ưu resize với debounce
+            let resizeTimer;
+            $(window).on('resize', function () {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    if ($('#flipbook').data('turn') && $('#modalDocThu').hasClass('show')) {
+                        const config = layKichThuocFlipbook();
+                        $('#flipbook').turn('display', config.display);
+                        $('#flipbook').turn('size', config.width, config.height);
+                        $('#flipbook').turn('center');
+                    }
+                }, 250);
+            });
+        </script>
+    }
+
+    <!-- Script điều khiển Xem thêm/Rút gọn -->
+    <script>
+        $(document).ready(function () {
+            // Đợi một chút để nội dung text render xong
+            setTimeout(function() {
+                const btn = document.getElementById("toggleDescBtn");
+                const content = document.getElementById("descContent");
+                const overlay = document.getElementById("descOverlay");
+                const wrapper = document.getElementById("descWrapper");
+
+                if (btn && content) {
+                    const actualHeight = content.scrollHeight;
+                    
+                    // Nếu nội dung dài hơn 250px (khoảng 10 dòng)
+                    if (actualHeight > 250) {
+                        btn.style.display = "inline-block";
+                    } else {
+                        btn.style.display = "none";
+                        if (overlay) overlay.style.display = "none";
+                        content.classList.remove("collapsed");
+                    }
+
+                    btn.addEventListener("click", function () {
+                        const isExpanded = content.classList.contains("expanded");
+
+                        if (isExpanded) {
+                            // Thu gọn lại
+                            content.classList.remove("expanded");
+                            content.classList.add("collapsed");
+                            btn.innerText = "Xem Thêm";
+                            if (overlay) overlay.style.opacity = "1";
+                            
+                            // Cuộn mượt lên đầu phần mô tả
+                            if (wrapper) {
+                                const offset = wrapper.getBoundingClientRect().top + window.pageYOffset - 130;
+                                window.scrollTo({ top: offset, behavior: 'smooth' });
+                            }
+                        } else {
+                            // Mở rộng ra
+                            content.classList.remove("collapsed");
+                            content.classList.add("expanded");
+                            btn.innerText = "Thu Gọn";
+                            if (overlay) overlay.style.opacity = "0";
+                        }
+                    });
+                }
+            }, 300);
+        });
+    </script>
+
+
+
+
+
+
+
+
+}

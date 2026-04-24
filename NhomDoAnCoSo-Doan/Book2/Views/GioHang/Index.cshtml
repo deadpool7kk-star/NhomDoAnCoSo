@@ -1,0 +1,132 @@
+﻿@model List<Book2.ViewModels.GioHangItemVM>
+
+@{
+    ViewData["Title"] = "Giỏ hàng";
+    decimal tongTien = Model.Sum(x => x.ThanhTien);
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Giỏ hàng của bạn</h2>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
+            Tiếp tục mua sách
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Ảnh</th>
+                                <th>Tên sách</th>
+                                <th>Tác giả</th>
+                                <th>Giá</th>
+                                <th style="width: 220px;">Số lượng</th>
+                                <th>Thành tiền</th>
+                                <th>Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td style="width: 100px;">
+                                        <img src="@(string.IsNullOrEmpty(item.HinhAnh) ? "/images/no-image.png" : item.HinhAnh)"
+                                             style="width: 80px; height: 100px; object-fit: cover;"
+                                             class="rounded shadow-sm"
+                                             alt="@item.TenSach" />
+                                    </td>
+
+                                    <td>
+                                        <div class="fw-bold">@item.TenSach</div>
+                                    </td>
+
+                                    <td>@item.TacGia</td>
+
+                                    <td class="text-success fw-bold">
+                                        @item.Gia.ToString("N0") VNĐ
+                                    </td>
+
+                                    <td>
+                                        <form asp-action="CapNhatSoLuong" method="post" class="d-flex gap-2 flex-column">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="chiTietGioHangId" value="@item.ChiTietGioHangId" />
+                                            <input type="number"
+                                                   name="soLuong"
+                                                   value="@item.SoLuong"
+                                                   min="0"
+                                                   max="99"
+                                                   class="form-control" />
+                                            <small class="text-muted">Nhập 0 để xóa sản phẩm</small>
+                                            <button type="submit" class="btn btn-warning btn-sm">
+                                                Cập nhật
+                                            </button>
+                                        </form>
+                                    </td>
+
+                                    <td class="fw-bold">
+                                        @item.ThanhTien.ToString("N0") VNĐ
+                                    </td>
+
+                                    <td>
+                                        <form asp-action="Xoa" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa sách này khỏi giỏ hàng?');">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="chiTietGioHangId" value="@item.ChiTietGioHangId" />
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                Xóa
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <form asp-action="XoaTatCa" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-outline-danger">
+                                Xóa toàn bộ giỏ hàng
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="col-md-6 text-end">
+                        <h4 class="fw-bold mb-3">
+                            Tổng tiền:
+                            <span class="text-success">@tongTien.ToString("N0") VNĐ</span>
+                        </h4>
+
+                        <a asp-controller="DatHang" asp-action="ThanhToan" class="btn btn-success btn-lg">
+                            Tiến hành đặt hàng
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            Giỏ hàng của bạn đang trống.
+        </div>
+    }
+</div>

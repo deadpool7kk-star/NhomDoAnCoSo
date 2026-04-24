@@ -1,0 +1,120 @@
+﻿@model IEnumerable<Book2.Models.ChiTietDonHang>
+
+@{
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "_AdminLayout";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "_StaffLayout";
+    }
+    else
+    {
+        Layout = "_ShipperLayout";
+    }
+
+    ViewData["Title"] = "Chi tiết đơn hàng";
+    var donHang = ViewBag.DonHang as Book2.Models.DonHang;
+    var trangThaiList = ViewBag.TrangThaiList as List<string> ?? new();
+}
+
+@if (donHang != null)
+{
+    <div class="card card-box mb-4">
+        <div class="card-body">
+            <h3 class="fw-bold mb-3">Đơn hàng #@donHang.Id</h3>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Người nhận:</strong> @donHang.TenNguoiNhan</p>
+                    <p><strong>SĐT:</strong> @donHang.SoDienThoai</p>
+                    <p><strong>Địa chỉ:</strong> @donHang.DiaChiNhanHang</p>
+                </div>
+
+                <div class="col-md-6">
+                    <p><strong>Ngày đặt:</strong> @donHang.NgayDat.ToString("dd/MM/yyyy HH:mm")</p>
+                    <p><strong>Tổng tiền:</strong> @donHang.TongTien.ToString("N0") VNĐ</p>
+                    <p>
+                        <strong>Trạng thái hiện tại:</strong>
+                        @if (donHang.TrangThai == "Chờ xác nhận")
+                        {
+                            <span class="badge bg-secondary">@donHang.TrangThai</span>
+                        }
+                        else if (donHang.TrangThai == "Đang giao")
+                        {
+                            <span class="badge bg-primary">@donHang.TrangThai</span>
+                        }
+                        else if (donHang.TrangThai == "Hoàn thành")
+                        {
+                            <span class="badge bg-success">@donHang.TrangThai</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">@donHang.TrangThai</span>
+                        }
+                    </p>
+                </div>
+            </div>
+
+            @if (donHang.TrangThai != "Hoàn thành" && donHang.TrangThai != "Đã hủy")
+            {
+                <form asp-action="UpdateStatus" method="post" class="mt-3">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@donHang.Id" />
+
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label class="form-label">Cập nhật trạng thái</label>
+                            <select name="trangThai" class="form-select">
+                                @foreach (var item in trangThaiList)
+                                {
+                                    if (item == donHang.TrangThai)
+                                    {
+                                        <option value="@item" selected>@item</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item">@item</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-success">Lưu trạng thái</button>
+                        </div>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+}
+
+<div class="card card-box">
+    <div class="card-body">
+        <h4 class="fw-bold mb-3">Sản phẩm trong đơn</h4>
+
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Tên sách</th>
+                    <th>Đơn giá</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(item.Sach?.TenSach ?? "Không còn dữ liệu")</td>
+                        <td>@item.DonGia.ToString("N0") VNĐ</td>
+                        <td>@item.SoLuong</td>
+                        <td>@((item.DonGia * item.SoLuong).ToString("N0")) VNĐ</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
