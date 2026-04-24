@@ -1,0 +1,75 @@
+@model Book2.ViewModels.AdminDashboardVM
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Staff Dashboard";
+}
+
+<div class="row g-4">
+
+    <div class="col-md-4">
+        <div class="card card-box">
+            <div class="card-body">
+                <div class="text-muted">Tổng sách</div>
+                <h2 class="fw-bold text-success">@Model.TongSach</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-box">
+            <div class="card-body">
+                <div class="text-muted">Tổng thể loại</div>
+                <h2 class="fw-bold text-primary">@Model.TongTheLoai</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-box">
+            <div class="card-body">
+                <div class="text-muted">Tổng đơn hàng</div>
+                <h2 class="fw-bold text-warning">@Model.TongDonHang</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row g-4 mt-2">
+    <div class="col-md-3">
+        <div class="card card-box">
+            <div class="card-body">
+                <div>Chờ xác nhận</div>
+                <h3>@Model.DonChoXacNhan</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card card-box">
+            <div class="card-body">
+                <div>Đang giao</div>
+                <h3>@Model.DonDangGiao</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card card-box">
+            <div class="card-body">
+                <div>Hoàn thành</div>
+                <h3>@Model.DonHoanThanh</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card card-box">
+            <div class="card-body">
+                <div>Đã hủy</div>
+                <h3>@Model.DonDaHuy</h3>
+            </div>
+        </div>
+    </div>
+</div>
