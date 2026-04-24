@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Book2.Models.DonHang>
+@model IEnumerable<Book2.Models.DonHang>
 
 @{
     if (User.IsInRole("Admin"))
@@ -7,7 +7,7 @@
     }
     else if (User.IsInRole("Staff"))
     {
-        Layout = "_StaffLayout";
+        Layout = "_AdminLayout";
     }
     else
     {
