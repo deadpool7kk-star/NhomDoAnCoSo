@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Book2.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Staff")]
     public class AdminTheLoaiController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -69,6 +69,7 @@ namespace Book2.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Book2.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Staff")]
     public class AdminPhieuNhapController : Controller
     {
         private readonly ApplicationDbContext _context;

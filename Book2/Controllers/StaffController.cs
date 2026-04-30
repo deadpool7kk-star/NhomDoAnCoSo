@@ -26,7 +26,12 @@ namespace Book2.Controllers
                 DonChoXacNhan = await _context.DonHangs.CountAsync(x => x.TrangThai == "Chờ xác nhận"),
                 DonDangGiao = await _context.DonHangs.CountAsync(x => x.TrangThai == "Đang giao"),
                 DonHoanThanh = await _context.DonHangs.CountAsync(x => x.TrangThai == "Hoàn thành"),
-                DonDaHuy = await _context.DonHangs.CountAsync(x => x.TrangThai == "Đã hủy")
+                DonDaHuy = await _context.DonHangs.CountAsync(x => x.TrangThai == "Đã hủy"),
+                SachSapHetHang = await _context.Saches
+                    .Where(x => x.SoLuong < 5)
+                    .OrderBy(x => x.SoLuong)
+                    .Take(10)
+                    .ToListAsync()
             };
 
             return View(model);
