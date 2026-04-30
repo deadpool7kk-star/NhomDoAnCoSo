@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Book2.Models
@@ -31,6 +31,20 @@ namespace Book2.Models
 
         public string? HinhAnh { get; set; }
 
+        // Các thuộc tính chi tiết mới bổ sung
+        [StringLength(150)]
+        public string? NhaXuatBan { get; set; }
+
+        public int? NamXuatBan { get; set; }
+
+        public int? SoTrang { get; set; }
+
+        [StringLength(50)]
+        public string? KichThuoc { get; set; }
+
+        [StringLength(50)]
+        public string? NgonNgu { get; set; }
+
         public DateTime NgayTao { get; set; } = DateTime.Now;
 
         public bool NoiBat { get; set; } = false;
@@ -39,14 +53,5 @@ namespace Book2.Models
         public int TheLoaiId { get; set; }
 
         public TheLoai? TheLoai { get; set; }
-
-        // tôi mới thêm các thuộc tính mới vào đây ( cho sách )
-        public string? NhaXuatBan { get; set; }
-        public DateTime? NgayXuatBan { get; set; }
-
-        public string? NgonNgu { get; set; }
-        public int? SoTrang { get; set; }
-        public double? TrongLuong { get; set; } // gram
-
     }
 }

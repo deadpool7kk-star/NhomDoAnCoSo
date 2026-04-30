@@ -1,4 +1,4 @@
-﻿using Book2.Data;
+using Book2.Data;
 using Book2.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -96,6 +96,13 @@ namespace Book2.Controllers
             sachDb.SoLuong = model.SoLuong;
             sachDb.MoTa = model.MoTa;
             sachDb.TheLoaiId = model.TheLoaiId;
+
+            // Cập nhật các thuộc tính chi tiết mới
+            sachDb.NhaXuatBan = model.NhaXuatBan;
+            sachDb.NamXuatBan = model.NamXuatBan;
+            sachDb.SoTrang = model.SoTrang;
+            sachDb.KichThuoc = model.KichThuoc;
+            sachDb.NgonNgu = model.NgonNgu;
 
             if (hinhUpload != null && hinhUpload.Length > 0)
             {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Book2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260423152744_init")]
-    partial class init
+    [Migration("20260429004041_AddBookTechnicalDetailsV2")]
+    partial class AddBookTechnicalDetailsV2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -237,11 +237,26 @@ namespace Book2.Migrations
                     b.Property<string>("HinhAnh")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("KichThuoc")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("MoTa")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("NamXuatBan")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("NgayTao")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("NgonNgu")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("NhaXuatBan")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<bool>("NoiBat")
                         .HasColumnType("bit");
@@ -250,6 +265,9 @@ namespace Book2.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("SoLuong")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SoTrang")
                         .HasColumnType("int");
 
                     b.Property<string>("TacGia")

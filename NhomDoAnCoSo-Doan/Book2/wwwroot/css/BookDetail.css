@@ -26,17 +26,31 @@
 }
 
 /* Image Box */
+/* Khung chứa ảnh bìa sách */
 .alpha-image-box {
-    text-align: center;
+    display: flex;                     /* Sử dụng Flexbox để căn giữa nội dung */
+    justify-content: center;           /* Căn giữa theo trục ngang */
+    align-items: center;               /* Căn giữa theo trục dọc */
+    min-height: 450px;                 /* Chiều cao tối thiểu để khung hình cân đối */
     border: 1px solid #eee;
     padding: 20px;
     border-radius: 8px;
     background: #fff;
+    overflow: hidden;
 }
+
+/* Ảnh bìa chính */
 .alpha-main-img {
-    max-width: 100%;
-    max-height: 400px;
-    object-fit: contain;
+    max-width: 100%;                   /* Không cho phép ảnh vượt quá chiều rộng khung */
+    max-height: 400px;                 /* Giới hạn chiều cao tối đa của ảnh */
+    width: auto;                       /* Tự động tính chiều rộng theo tỉ lệ */
+    height: auto;                      /* Tự động tính chiều cao theo tỉ lệ */
+    object-fit: contain;               /* Đảm bảo ảnh hiển thị đầy đủ, không bị cắt mất */
+    transition: transform 0.3s ease;   /* Hiệu ứng mượt mà khi tương tác */
+}
+
+.alpha-main-img:hover {
+    transform: scale(1.02);            /* Phóng to nhẹ khi di chuột vào ảnh */
 }
 
 /* Preview Button */
@@ -60,9 +74,9 @@
 }
 
 .alpha-book-title {
-    font-family: 'Merriweather', serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     font-size: 24px;
-    font-weight: 600;
+    font-weight: 700;
     color: #333;
     line-height: 1.4;
     margin-bottom: 16px;
@@ -245,41 +259,82 @@
 }
 
 .alpha-nav-tabs {
-    border-bottom: none;
+    border-bottom: 1px solid #eee;
     margin-bottom: 24px;
-    gap: 12px; /* Khoảng cách giữa 2 tab */
-}
-.alpha-nav-tabs .nav-item {
-    margin-bottom: 0;
 }
 .alpha-nav-tabs .nav-link {
     border: none;
-    color: #6b7280; /* Màu xám thanh lịch */
+    color: #787878;
     font-weight: 600;
     font-size: 16px;
-    padding: 10px 24px;
-    border-radius: 12px; /* Bo góc mềm mại */
+    padding: 12px 24px;
+    position: relative;
     background: transparent;
-    transition: all 0.25s ease;
 }
 .alpha-nav-tabs .nav-link:hover {
-    background: #f5fbf5; /* Nền xanh lục cực nhạt khi rê chuột */
-    color: #2ea043;
+    color: #333;
 }
 .alpha-nav-tabs .nav-link.active {
-    background: #e1f4e1; /* Nền xanh lục Pastel dịu mắt */
-    color: #2ea043; /* Chữ màu xanh đậm nổi bật */
-    font-weight: 700;
+    color: #007bff;
+    background: transparent;
 }
 .alpha-nav-tabs .nav-link.active::after {
-    display: none;
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #007bff;
 }
 
-.alpha-tab-content .content-text {
+/* --- Phần mô tả sản phẩm với tính năng Xem thêm / Rút gọn (Fahasa Style) --- */
+.description-inner-box .content-text {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     font-size: 15px;
     line-height: 1.8;
     color: #333;
     white-space: pre-wrap;
+    position: relative;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+/* Trạng thái thu gọn: tăng lên khoảng 10-12 dòng */
+.content-text.collapsed {
+    max-height: 300px;
+}
+
+/* Hiệu ứng mờ dần ở cuối (Gradient) - Đã sửa lỗi không hiển thị */
+.content-text.collapsed::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px; /* Tăng độ rộng vùng mờ để trông tự nhiên hơn */
+    background: linear-gradient(transparent, #ffffff); /* Chuyển hẳn sang trắng đặc ở đáy */
+    pointer-events: none;
+}
+
+/* Nút bấm Xem thêm / Rút gọn - Theo tone màu đỏ Fahasa */
+.btn-toggle-desc {
+    display: block;
+    margin: 20px auto 0;
+    padding: 6px 30px;
+    background: #fff;
+    border: 1px solid #ff424e;
+    color: #ff424e;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-toggle-desc:hover {
+    background: #ff424e;
+    color: #fff;
 }
 
 .alpha-detail-table th {
@@ -302,49 +357,286 @@
     color: #333;
 }
 
-/* Related Books (from previous styling) */
-.related-book-card {
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 12px;
-    transition: box-shadow 0.2s, transform 0.2s;
+/* 
+   GIAO DIỆN PHONG CÁCH FAHASA - CẬP NHẬT MỚI:
+   1. Cột trái: Ảnh sách trượt theo (Sticky), Thumbnails, Nút mua hàng & Chính sách Fahasa.
+   2. Cột phải: Thông tin chi tiết & Mô tả sản phẩm xếp chồng (Stacked Boxes).
+   3. Đồng bộ font chữ không chân hiện đại, màu sắc đỏ chủ đạo (#ff424e).
+*/
+/* Đảm bảo các cột trong Row luôn có chiều cao bằng nhau để Sticky Sidebar hoạt động chuẩn */
+.row.g-4 {
+    display: flex;
+    align-items: stretch;
+}
+
+/* Cột trái - Trượt theo nội dung bên phải cho đến hết Mô tả */
+.fahasa-left-col {
     background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    position: sticky;
+    top: 20px; /* Dính cách mép trên 20px vì Menu chính đã đứng yên không trượt theo */
+    z-index: 10;
+    margin-bottom: 20px;
 }
-.related-book-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
+
+/* Thumbnails */
+.alpha-thumb-list {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+    overflow-x: auto;
 }
-.related-book-img-wrap {
-    text-align: center;
+.alpha-thumb-item {
+    width: 60px;
+    height: 60px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    cursor: pointer;
+    overflow: hidden;
+}
+.alpha-thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.thumb-more {
+    background: #4a4a4a;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Nút bấm cột trái */
+.fahasa-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+.btn-fahasa-cart {
+    flex: 1;
+    background: #fff;
+    border: 2px solid #ff424e;
+    color: #ff424e;
+    font-weight: 700;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+.btn-fahasa-cart:hover {
+    background: #fff0f1;
+}
+.btn-fahasa-buy {
+    flex: 1;
+    background: #ff424e;
+    color: #fff;
+    font-weight: 700;
+    height: 48px;
+    border-radius: 8px;
+    border: none;
+    transition: background 0.2s;
+}
+.btn-fahasa-buy:hover {
+    background: #e03540;
+}
+
+/* Chính sách ưu đãi */
+.fahasa-policy {
+    margin-top: 25px;
+}
+.policy-title {
+    font-size: 15px;
+    font-weight: 700;
     margin-bottom: 12px;
 }
-.related-book-img {
-    height: 180px;
-    object-fit: contain;
+.policy-list {
+    list-style: none;
+    padding: 0;
 }
-.related-book-name {
+.policy-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-top: 1px solid #f1f1f1;
+    cursor: pointer;
+}
+.policy-item:last-child {
+    border-bottom: 1px solid #f1f1f1;
+}
+.policy-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.policy-info i {
+    font-size: 18px;
+    color: #ff424e;
+}
+.policy-info span {
     font-size: 14px;
-    font-weight: 500;
-    line-height: 1.4;
-    height: 40px;
-    overflow: hidden;
-    margin-bottom: 4px;
-}
-.related-book-name a {
     color: #333;
 }
-.related-book-name a:hover {
-    color: #007bff;
+.policy-arrow {
+    color: #999;
 }
+
+/* Cột phải - Stacked Boxes */
+.fahasa-content-box {
+    background: #fff;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.fahasa-box-title {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.alpha-detail-table {
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+.alpha-detail-table tr td:first-child {
+    width: 250px;
+    color: #777;
+    padding-right: 20px;
+}
+.alpha-detail-table tr td {
+    padding: 12px 0;
+    border-bottom: 1px solid #f2f2f2;
+    vertical-align: top;
+}
+.alpha-detail-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Override existing styles for consistency */
+.alpha-detail-page {
+    background-color: #f0f0f0;
+}
+
+/* --- PHẦN SÁCH CÙNG THỂ LOẠI (GREEN THEME) --- */
+.alpha-related-section {
+    margin-top: 50px;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    border-top: 4px solid #2ea043; /* Thanh trang trí màu xanh lá ở trên đầu */
+}
+
+.related-title {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #2ea043;
+    margin-bottom: 25px;
+}
+
+/* Thẻ sách liên quan */
+.related-book-card {
+    background: #fff;
+    border: 1px solid #f1f1f1;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    padding: 20px 15px; /* Tăng padding để đẩy ảnh nhỏ lại */
+    position: relative;
+}
+
+.related-book-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(46, 160, 67, 0.15);
+    border-color: #2ea043;
+}
+
+.related-book-img-wrap {
+    width: 100%;
+    height: 200px; /* Tăng chiều cao lên để ảnh trông thanh thoát hơn */
+    overflow: hidden;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.related-book-img {
+    max-width: 70%; /* Giảm chiều ngang lại */
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.5s ease;
+}
+
+.related-book-card:hover .related-book-img {
+    transform: scale(1.1);
+}
+
+.related-book-name {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    height: 40px; /* Cố định 2 dòng */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.related-book-name a:hover {
+    color: #2ea043 !important;
+}
+
 .related-book-author {
     font-size: 12px;
-    color: #808089;
-    margin-bottom: 8px;
+    color: #888;
+    margin-bottom: 10px;
 }
+
 .related-book-price {
     font-size: 16px;
     font-weight: 700;
-    color: #ff424e;
+    color: #2ea043; /* Giá tiền màu xanh lá nổi bật */
+}
+
+/* Nhãn phụ "Xem chi tiết" khi hover */
+.related-book-card::after {
+    content: 'Xem chi tiết';
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(46, 160, 67, 0.9);
+    color: #fff;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.related-book-card:hover::after {
+    opacity: 1;
+    top: 50%;
 }
 
 /* Responsive */
@@ -355,6 +647,7 @@
     }
 }
 
+/* Flipbook Fullscreen Modal */
 /* Flipbook Fullscreen Modal */
 .preview-modal-fullscreen {
     background: rgba(15, 23, 42, 0.98) !important; /* Dark slate overlay */
@@ -387,18 +680,24 @@
 .preview-body-dark {
     padding: 0;
     height: 100vh;
-.preview-stage-dark {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    padding: 60px; /* Space for arrows */
 }
 
+/* Vùng chứa sách đọc thử */
+.preview-stage-dark {
+    display: flex;
+    justify-content: center;           /* Căn giữa theo chiều ngang */
+    align-items: center;               /* Căn giữa theo chiều dọc */
+    width: 100%;
+    height: 100%;
+    padding: 40px;                     /* Khoảng cách an toàn với các nút điều hướng */
+    overflow: hidden;
+}
+
+/* Thư viện turn.js tự tạo thẻ div bao ngoài #flipbook, ta cần đảm bảo nó luôn ở giữa */
 #flipbook {
-    margin: 0 auto;
-    transition: transform 0.4s ease-in-out;
+    margin: 0 auto !important;         /* Ép sách luôn nằm chính giữa màn hình */
+    position: relative !important;     /* Đảm bảo vị trí tương đối để thư viện hoạt động đúng */
+    transition: transform 0.3s ease;
 }
 
 #flipbook .page {
@@ -487,102 +786,4 @@
     }
     .prev-btn { left: 10px; }
     .next-btn { right: 10px; }
-}
-
-/*css của nút xem thêm rút gọn*/
-/* ====== BOX CHUNG ====== */
-.alpha-info-box,
-.alpha-bottom-block,
-.alpha-related-section {
-    background: #ffffff;
-    border: 1px solid #d4edda; /* xanh lá nhạt */
-    border-radius: 12px;
-    padding: 20px;
-    transition: all 0.3s ease;
-}
-
-    /* Hover sáng lên */
-    .alpha-info-box:hover,
-    .alpha-bottom-block:hover,
-    .alpha-related-section:hover {
-        box-shadow: 0 8px 25px rgba(0, 128, 0, 0.08);
-        transform: translateY(-2px);
-    }
-
-/* ====== TAB ====== */
-.alpha-nav-tabs .nav-link {
-    color: #2e7d32;
-    font-weight: 500;
-    border: none;
-}
-
-    .alpha-nav-tabs .nav-link.active {
-        color: #ffffff;
-        background: #4caf50;
-        border-radius: 8px 8px 0 0;
-    }
-
-/* ====== TABLE ====== */
-.alpha-detail-table {
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-    .alpha-detail-table th {
-        background: #f1f8f4;
-        color: #2e7d32;
-        font-weight: 600;
-    }
-
-    .alpha-detail-table td {
-        background: #ffffff;
-    }
-
-    /* hover row */
-    .alpha-detail-table tr:hover td {
-        background: #f9fff9;
-    }
-
-/* ====== BUTTON ====== */
-.alpha-btn-cart {
-    background: #4caf50;
-    color: #fff;
-    border-radius: 8px;
-    border: none;
-    transition: all 0.3s;
-}
-
-    .alpha-btn-cart:hover {
-        background: #43a047;
-        box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
-    }
-
-.alpha-btn-buy {
-    background: #2e7d32;
-    color: #fff;
-    border-radius: 8px;
-    border: none;
-}
-
-    .alpha-btn-buy:hover {
-        background: #1b5e20;
-    }
-
-/* ====== MÔ TẢ ====== */
-.desc-wrapper {
-    position: relative;
-    background: #ffffff;
-    border: 1px solid #d4edda;
-    border-radius: 10px;
-    padding: 15px;
-}
-
-.content-text {
-    line-height: 1.7;
-    color: #333;
-}
-
-/* khi hover cả box */
-.desc-wrapper:hover {
-    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.1);
 }

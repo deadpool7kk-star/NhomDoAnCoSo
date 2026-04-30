@@ -234,20 +234,26 @@ namespace Book2.Migrations
                     b.Property<string>("HinhAnh")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("KichThuoc")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("MoTa")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("NamXuatBan")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("NgayTao")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("NgayXuatBan")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("NgonNgu")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("NhaXuatBan")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<bool>("NoiBat")
                         .HasColumnType("bit");
@@ -273,9 +279,6 @@ namespace Book2.Migrations
 
                     b.Property<int>("TheLoaiId")
                         .HasColumnType("int");
-
-                    b.Property<double?>("TrongLuong")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 

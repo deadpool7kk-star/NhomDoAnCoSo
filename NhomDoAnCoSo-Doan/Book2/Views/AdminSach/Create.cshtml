@@ -61,6 +61,32 @@
                     <div class="form-text mt-2"><i class="bi bi-info-circle me-1"></i>Định dạng hỗ trợ: JPG, PNG, WEBP. Dung lượng tối đa 5MB.</div>
                 </div>
 
+                <!-- Các thuộc tính chi tiết mới -->
+                <div class="col-md-6">
+                    <label asp-for="NhaXuatBan" class="form-label fw-semibold text-muted">Nhà xuất bản</label>
+                    <input asp-for="NhaXuatBan" class="form-control bg-light border-0 px-3 py-2" style="border-radius: 8px;" placeholder="Ví dụ: NXB Trẻ" />
+                </div>
+
+                <div class="col-md-3">
+                    <label asp-for="NamXuatBan" class="form-label fw-semibold text-muted">Năm XB</label>
+                    <input asp-for="NamXuatBan" type="number" class="form-control bg-light border-0 px-3 py-2" style="border-radius: 8px;" placeholder="2024" />
+                </div>
+
+                <div class="col-md-3">
+                    <label asp-for="SoTrang" class="form-label fw-semibold text-muted">Số trang</label>
+                    <input asp-for="SoTrang" type="number" class="form-control bg-light border-0 px-3 py-2" style="border-radius: 8px;" placeholder="0" />
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="KichThuoc" class="form-label fw-semibold text-muted">Kích thước</label>
+                    <input asp-for="KichThuoc" class="form-control bg-light border-0 px-3 py-2" style="border-radius: 8px;" placeholder="Ví dụ: 13 x 20 cm" />
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="NgonNgu" class="form-label fw-semibold text-muted">Ngôn ngữ</label>
+                    <input asp-for="NgonNgu" class="form-control bg-light border-0 px-3 py-2" style="border-radius: 8px;" placeholder="Ví dụ: Tiếng Việt" />
+                </div>
+
                 <div class="col-12">
                     <label asp-for="MoTa" class="form-label fw-semibold text-muted">Mô tả nội dung</label>
                     <textarea asp-for="MoTa" class="form-control bg-light border-0 px-3 py-2" rows="5" style="border-radius: 8px;" placeholder="Nhập mô tả tóm tắt sách..."></textarea>

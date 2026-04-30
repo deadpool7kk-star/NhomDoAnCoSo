@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Book2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260424011624_UpdateBookFullInfo")]
-    partial class UpdateBookFullInfo
+    [Migration("20260424111312_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -243,15 +243,6 @@ namespace Book2.Migrations
                     b.Property<DateTime>("NgayTao")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("NgayXuatBan")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NgonNgu")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NhaXuatBan")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("NoiBat")
                         .HasColumnType("bit");
 
@@ -259,9 +250,6 @@ namespace Book2.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("SoLuong")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SoTrang")
                         .HasColumnType("int");
 
                     b.Property<string>("TacGia")
@@ -276,9 +264,6 @@ namespace Book2.Migrations
 
                     b.Property<int>("TheLoaiId")
                         .HasColumnType("int");
-
-                    b.Property<double?>("TrongLuong")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
