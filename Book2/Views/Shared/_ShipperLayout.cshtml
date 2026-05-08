@@ -72,9 +72,10 @@
     <div class="sidebar">
         <div class="logo">Shipper</div>
 
-        <a asp-controller="Shipper" asp-action="Dashboard">Dashboard</a>
-        <a asp-controller="AdminDonHang" asp-action="Index">Đơn cần giao</a>
-        <a asp-controller="Home" asp-action="Index">Về website</a>
+        <a asp-controller="Shipper" asp-action="Dashboard"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
+        <a asp-controller="AdminDonHang" asp-action="Index"><i class="bi bi-list-task me-2"></i> Đơn cần giao</a>
+        <a asp-controller="AdminDonHang" asp-action="Index" asp-route-trangThai="Hoàn thành"><i class="bi bi-clock-history me-2"></i> Lịch sử giao</a>
+        <a asp-controller="Home" asp-action="Index"><i class="bi bi-house me-2"></i> Về website</a>
     </div>
 
     <div class="main">

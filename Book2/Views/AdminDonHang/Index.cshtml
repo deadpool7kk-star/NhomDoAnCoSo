@@ -29,6 +29,7 @@
                     <th>SĐT</th>
                     <th>Ngày đặt</th>
                     <th>Tổng tiền</th>
+                    <th>Shipper</th>
                     <th>Trạng thái</th>
                     <th>Chi tiết</th>
                 </tr>
@@ -42,6 +43,16 @@
                         <td>@item.SoDienThoai</td>
                         <td>@item.NgayDat.ToString("dd/MM/yyyy HH:mm")</td>
                         <td>@item.TongTien.ToString("N0") VNĐ</td>
+                        <td>
+                            @if (item.Shipper != null)
+                            {
+                                <span class="text-primary fw-bold"><i class="bi bi-person-badge me-1"></i> @item.Shipper.HoTen</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted small"><em>Chưa gán</em></span>
+                            }
+                        </td>
                         <td>
                             @if (item.TrangThai == "Chờ xác nhận")
                             {

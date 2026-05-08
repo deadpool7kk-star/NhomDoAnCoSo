@@ -1,56 +1,104 @@
-﻿@model Book2.ViewModels.AdminDashboardVM
+@model Book2.ViewModels.AdminDashboardVM
 
 @{
     Layout = "_ShipperLayout";
-    ViewData["Title"] = "Shipper Dashboard";
+    ViewData["Title"] = "Bảng điều khiển Shipper";
 }
 
-<div class="row g-4">
+<div class="container-fluid">
+    <h2 class="mb-4 fw-bold">Chào mừng trở lại, @User.Identity?.Name!</h2>
 
-    <div class="col-md-3">
-        <div class="card card-box">
-            <div class="card-body">
-                <div class="text-muted">Tổng đơn hàng</div>
-                <h2 class="fw-bold text-warning">@Model.TongDonHang</h2>
+    <div class="row g-4">
+        <!-- Đơn hàng cần giao -->
+        <div class="col-md-3">
+            <div class="card card-box border-start border-4 border-warning h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="bg-warning bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-box-seam text-warning h3 mb-0"></i>
+                        </div>
+                        <span class="badge bg-warning text-dark rounded-pill">Đợi lấy hàng</span>
+                    </div>
+                    <h3 class="fw-bold mb-1">@Model.DonChoXacNhan</h3>
+                    <p class="text-muted small mb-0">Đơn hàng mới được gán</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Đang đi giao -->
+        <div class="col-md-3">
+            <div class="card card-box border-start border-4 border-primary h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-truck text-primary h3 mb-0"></i>
+                        </div>
+                        <span class="badge bg-primary rounded-pill">Đang giao</span>
+                    </div>
+                    <h3 class="fw-bold mb-1">@Model.DonDangGiao</h3>
+                    <p class="text-muted small mb-0">Đơn hàng đang trên đường</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hoàn thành -->
+        <div class="col-md-3">
+            <div class="card card-box border-start border-4 border-success h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-check-circle text-success h3 mb-0"></i>
+                        </div>
+                        <span class="badge bg-success rounded-pill">Thành công</span>
+                    </div>
+                    <h3 class="fw-bold mb-1">@Model.DonHoanThanh</h3>
+                    <p class="text-muted small mb-0">Tổng đơn đã giao xong</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tổng đơn hàng -->
+        <div class="col-md-3">
+            <div class="card card-box border-start border-4 border-dark h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="bg-dark bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-clipboard-data text-dark h3 mb-0"></i>
+                        </div>
+                        <span class="badge bg-dark rounded-pill">Tất cả</span>
+                    </div>
+                    <h3 class="fw-bold mb-1">@Model.TongDonHang</h3>
+                    <p class="text-muted small mb-0">Tổng số đơn được giao</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="card card-box">
-            <div class="card-body">
-                <div class="text-muted">Chờ xác nhận</div>
-                <h2 class="fw-bold text-secondary">@Model.DonChoXacNhan</h2>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card card-box">
-            <div class="card-body">
-                <div class="text-muted">Đang giao</div>
-                <h2 class="fw-bold text-primary">@Model.DonDangGiao</h2>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card card-box">
-            <div class="card-body">
-                <div class="text-muted">Hoàn thành</div>
-                <h2 class="fw-bold text-success">@Model.DonHoanThanh</h2>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<div class="row g-4 mt-2">
-    <div class="col-md-3">
-        <div class="card card-box">
-            <div class="card-body">
-                <div>Đã hủy</div>
-                <h3>@Model.DonDaHuy</h3>
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <div class="card card-box">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="fw-bold mb-0">Thao tác nhanh</h4>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <a asp-controller="AdminDonHang" asp-action="Index" class="btn btn-outline-primary w-100 py-3 shadow-sm">
+                                <i class="bi bi-list-ul me-2"></i> Xem danh sách đơn hàng
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a asp-controller="AdminDonHang" asp-action="Index" asp-route-trangThai="Đang giao" class="btn btn-outline-warning w-100 py-3 shadow-sm">
+                                <i class="bi bi-truck me-2"></i> Đơn đang đi giao
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary w-100 py-3 shadow-sm">
+                                <i class="bi bi-house me-2"></i> Về trang chủ
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

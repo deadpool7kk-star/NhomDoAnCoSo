@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+using Book2.Models;
 using Book2.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +12,12 @@ namespace Book2.Controllers
     public class AdminDonHangController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AdminDonHangController(ApplicationDbContext context)
+        public AdminDonHangController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> InHoaDon(int id)
@@ -42,9 +46,8 @@ namespace Book2.Controllers
 
             if (User.IsInRole("Shipper"))
             {
-                query = query.Where(x =>
-                    x.TrangThai == "Chờ xác nhận" ||
-                    x.TrangThai == "Đang giao");
+                var currentUserId = _userManager.GetUserId(User);
+                query = query.Where(x => x.ShipperId == currentUserId);
             }
 
             if (!string.IsNullOrEmpty(trangThai))
@@ -53,6 +56,7 @@ namespace Book2.Controllers
             }
 
             var ds = await query
+                .Include(x => x.Shipper)
                 .OrderByDescending(x => x.NgayDat)
                 .ToListAsync();
 
@@ -113,7 +117,32 @@ namespace Book2.Controllers
             ViewBag.DonHang = donHang;
             ViewBag.TrangThaiList = trangThaiList;
 
+            // Lấy danh sách Shipper để hiển thị trong dropdown
+            var shippers = await _userManager.GetUsersInRoleAsync("Shipper");
+            ViewBag.ShipperList = shippers;
+
             return View(chiTiet);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Staff")]
+        public async Task<IActionResult> AssignShipper(int id, string shipperId)
+        {
+            var donHang = await _context.DonHangs.FindAsync(id);
+            if (donHang == null) return NotFound();
+
+            if (donHang.TrangThai == "Hoàn thành" || donHang.TrangThai == "Đã hủy")
+            {
+                TempData["Error"] = "Đơn hàng đã kết thúc, không thể gán shipper.";
+                return RedirectToAction(nameof(Detail), new { id });
+            }
+
+            donHang.ShipperId = shipperId;
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Gán Shipper cho đơn hàng thành công.";
+            return RedirectToAction(nameof(Detail), new { id });
         }
 
         [HttpPost]
@@ -162,6 +191,13 @@ namespace Book2.Controllers
             }
 
             donHang.TrangThai = trangThai;
+
+            // Nếu trạng thái là Hoàn thành, cập nhật ngày giao
+            if (trangThai == "Hoàn thành")
+            {
+                donHang.NgayGiao = DateTime.Now;
+            }
+
             await _context.SaveChangesAsync();
 
             TempData["Success"] = "Cập nhật trạng thái đơn hàng thành công.";

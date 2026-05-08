@@ -62,44 +62,92 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center mt-3 border-top pt-3">
-                @if (donHang.TrangThai != "Hoàn thành" && donHang.TrangThai != "Đã hủy")
+            <div class="d-flex flex-column mt-3 border-top pt-3">
+                @if (User.IsInRole("Admin") || User.IsInRole("Staff"))
                 {
-                    <form asp-action="UpdateStatus" method="post" class="flex-grow-1 me-3">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="id" value="@donHang.Id" />
-
-                        <div class="row g-3 align-items-end">
+                    <div class="mb-4">
+                        <form asp-action="AssignShipper" method="post" class="row g-3 align-items-end">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@donHang.Id" />
                             <div class="col-md-4">
-                                <label class="form-label small">Cập nhật trạng thái</label>
-                                <select name="trangThai" class="form-select">
-                                    @foreach (var item in trangThaiList)
+                                <label class="form-label small fw-bold text-uppercase text-muted">Giao cho Shipper</label>
+                                <select name="shipperId" class="form-select border-success shadow-sm">
+                                    <option value="">-- Chọn Shipper --</option>
+                                    @foreach (var shipper in ViewBag.ShipperList as IEnumerable<Book2.Models.ApplicationUser>)
                                     {
-                                        if (item == donHang.TrangThai)
+                                        if (shipper.Id == donHang.ShipperId)
                                         {
-                                            <option value="@item" selected>@item</option>
+                                            <option value="@shipper.Id" selected>@shipper.HoTen (@shipper.Email)</option>
                                         }
                                         else
                                         {
-                                            <option value="@item">@item</option>
+                                            <option value="@shipper.Id">@shipper.HoTen (@shipper.Email)</option>
                                         }
                                     }
                                 </select>
                             </div>
-
                             <div class="col-md-3">
-                                <button type="submit" class="btn btn-success px-4">Lưu trạng thái</button>
+                                <button type="submit" class="btn btn-primary w-100 shadow-sm"><i class="bi bi-person-check-fill me-1"></i> Gán Shipper</button>
                             </div>
-                        </div>
-                    </form>
+                            @if (!string.IsNullOrEmpty(donHang.ShipperId))
+                            {
+                                <div class="col-md-5">
+                                    <div class="alert alert-info py-2 px-3 mb-0 d-flex align-items-center shadow-sm border-0">
+                                        <i class="bi bi-truck me-2 h5 mb-0"></i>
+                                        <span>Shipper hiện tại: <strong>@donHang.Shipper?.HoTen</strong></span>
+                                    </div>
+                                </div>
+                            }
+                        </form>
+                    </div>
                 }
-                
-                @if (User.IsInRole("Admin") || User.IsInRole("Staff"))
+                else if (User.IsInRole("Shipper") && !string.IsNullOrEmpty(donHang.ShipperId))
                 {
-                    <a asp-action="InHoaDon" asp-route-id="@donHang.Id" class="btn btn-outline-dark px-4" target="_blank">
-                        <i class="bi bi-printer me-1"></i> In Hóa Đơn PDF
-                    </a>
+                    <div class="alert alert-success border-0 shadow-sm mb-4">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        Đơn hàng này đã được gán cho bạn.
+                    </div>
                 }
+
+                <div class="d-flex justify-content-between align-items-center">
+                    @if (donHang.TrangThai != "Hoàn thành" && donHang.TrangThai != "Đã hủy")
+                    {
+                        <form asp-action="UpdateStatus" method="post" class="flex-grow-1 me-3">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@donHang.Id" />
+
+                            <div class="row g-3 align-items-end">
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold text-uppercase text-muted">Cập nhật trạng thái</label>
+                                    <select name="trangThai" class="form-select border-success shadow-sm">
+                                        @foreach (var item in trangThaiList)
+                                        {
+                                            if (item == donHang.TrangThai)
+                                            {
+                                                <option value="@item" selected>@item</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item">@item</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-success w-100 shadow-sm"><i class="bi bi-save me-1"></i> Lưu trạng thái</button>
+                                </div>
+                            </div>
+                        </form>
+                    }
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("Staff"))
+                    {
+                        <a asp-action="InHoaDon" asp-route-id="@donHang.Id" class="btn btn-outline-dark px-4 shadow-sm" target="_blank">
+                            <i class="bi bi-printer me-1"></i> In Hóa Đơn PDF
+                        </a>
+                    }
+                </div>
             </div>
         </div>
     </div>

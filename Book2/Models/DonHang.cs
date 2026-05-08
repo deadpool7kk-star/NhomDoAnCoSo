@@ -34,6 +34,13 @@ namespace Book2.Models
         [StringLength(50)]
         public string TrangThai { get; set; } = "Chờ xác nhận";
 
+        public string? ShipperId { get; set; }
+
+        [ForeignKey("ShipperId")]
+        public virtual ApplicationUser? Shipper { get; set; }
+
+        public DateTime? NgayGiao { get; set; }
+
         public ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; } = new List<ChiTietDonHang>();
     }
 }
